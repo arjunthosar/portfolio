@@ -1,12 +1,58 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Hello, World!</title>
-	</head>
-	<body>
-		<h1 id="heading">Hello, World!</h1>
-		<p>This page comes from a static asset stored at `public/index.html` as configured in `wrangler.jsonc`.</p>
-	</body>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Photography Portfolio</title>
+    <link rel="stylesheet" href="css/stylesheet.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">My Portfolio</div>
+        <div class="menu-toggle" id="toggle">&#9776;</div>
+        <nav id="nav">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <section id="home" class="banner">
+        <div class="banner-content">
+            <h1>Photography</h1>
+            <p>Capturing life's finest moments through my lens.</p>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="about-container">
+            <div class="about-image">
+                <img src="assets/about-img.jpg" alt="About Image">
+            </div>
+            <div class="about-text">
+                <h2>About Me</h2>
+                <p>
+                    (about me text here)
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        /* Get menu toggle element */
+        const toggle = document.getElementById('toggle');
+        /* Get nav element */
+        const nav = document.getElementById('nav');
+
+        /* Add event listener to menu toggle */
+        toggle.addEventListener('click', () => {
+            /* Toggle active class on nav */
+            nav.classList.toggle('active');
+        });
+    </script>
+
+</body>
 </html>
+
