@@ -5,6 +5,10 @@
     box-sizing: border-box;
 }
 
+#darkbackground {
+    background-color: #111;
+}
+
 /* Add font family and color to body */
 body {
     font-family: sans-serif;
@@ -31,6 +35,13 @@ header {
     /* Make logo font bold and font size 1.5rem */
     font-weight: bold;
     font-size: 1.5rem;
+}
+
+.logo a {
+    /* Make link color white */
+    color: white;
+    /* Remove underline from link */
+    text-decoration: none;
 }
 
 /* Style links in nav */
@@ -89,9 +100,44 @@ nav a {
     }
 }
 
+.slider {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    z-index: 0;
+}
+
+.slide {
+    display: flex;
+    align-items: center;      /* Vertically center content */
+    justify-content: center;  /* Horizontally center content */
+    height: 100vh;            /* Or whatever height you want */
+    position: relative;
+    overflow: hidden;
+}
+
+.home-container {
+    background-color: #295026;
+    background-image: url("../assets/greenvelvet.jpg");
+}
+
+.home-container .slide img {
+    width: 100vw;
+    min-height: 75vh;
+    max-height: 100vh;
+    object-fit: cover;
+    display: block;
+}
+
+.slide-track {
+    display: flex;
+    width: 300%;
+    animation: scroll 40s linear infinite;
+}
+
 .banner {
     height: 100vh;
-    background: url('../assets/slider1.png') center center/cover no-repeat; /* centered, covers entire element, doesn't repeat*/
     display: flex;
     align-items: center;
     justify-content: center;

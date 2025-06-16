@@ -5,8 +5,31 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="css/stylesheet.css">
 </head>
-<body>
-    
+<body id="darkbackground">
+    <header>
+        <div class="logo"><a href="index.html">My Portfolio</a></div>
+        <div class="menu-toggle" id="toggle">&#9776;</div>
+        <nav id="nav">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <script>
+        /* Get menu toggle element */
+        const toggle = document.getElementById('toggle');
+        /* Get nav element */
+        const nav = document.getElementById('nav');
+
+        /* Add event listener to menu toggle */
+        toggle.addEventListener('click', () => {
+            /* Toggle active class on nav */
+            nav.classList.toggle('active');
+        });
+    </script>
 </body>
 </html>
