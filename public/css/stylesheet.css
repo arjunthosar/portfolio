@@ -114,7 +114,7 @@ nav a {
     justify-content: center;  /* Horizontally center content */
     height: 100vh;            /* Or whatever height you want */
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .home-container {
@@ -123,17 +123,22 @@ nav a {
 }
 
 .home-container .slide img {
-    width: 100vw;
-    min-height: 75vh;
-    max-height: 100vh;
+    width: auto;
+    height: 75vh;
     object-fit: cover;
     display: block;
+    padding: 20px;
 }
 
 .slide-track {
     display: flex;
-    width: 300%;
-    animation: scroll 40s linear infinite;
+    width: max-content;
+    animation: scroll 10s linear infinite;
+}
+
+@keyframes scroll {
+	0% { transform: translateX(0); }
+	100% { transform: translateX(-50%)}
 }
 
 .banner {
@@ -153,7 +158,7 @@ nav a {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.3);
     z-index: 1;
 }
 
