@@ -7,18 +7,18 @@
     <link rel="stylesheet" href="css/stylesheet.css">
 </head>
 <body>
-    <header>
-        <div class="logo"><a href="index.html">My Portfolio</a></div>
-        <div class="menu-toggle" id="toggle">&#9776;</div>
-        <nav id="nav">
-            <a href="index.html">Home</a>
-            <a href="about.html">About</a>
-            <a href="#gallery">Gallery</a>
-            <a href="#contact">Contact</a>
-        </nav>
-    </header>
-
     <div class="home-container">
+        <header>
+            <div class="logo"><a href="index.html">My Portfolio</a></div>
+            <div class="menu-toggle" id="toggle">&#9776;</div>
+            <nav id="nav">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="#gallery">Gallery</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </header>
+
         <div class="slider">
             <div class="slide-track">
                 <div class="slide">
@@ -31,31 +31,31 @@
                     <img src="assets/slider3.jpg" alt="Slide 3">
                 </div>
                 <div class="slide">
-                    <img src="assets/slider4.jpg" alt="Slide 1">
+                    <img src="assets/slider4.jpg" alt="Slide 4">
                 </div>
                 <div class="slide">
-                    <img src="assets/slider5.jpg" alt="Slide 2">
+                    <img src="assets/slider5.jpg" alt="Slide 5">
                 </div>
                 <div class="slide">
-                    <img src="assets/slider1.jpg" alt="Slide 3">
+                    <img src="assets/slider1.jpg" alt="Slide 1">
                 </div>
                 <div class="slide">
-                    <img src="assets/slider2.jpg" alt="Slide 1">
+                    <img src="assets/slider2.jpg" alt="Slide 2">
                 </div>
                 <div class="slide">
-                    <img src="assets/slider3.jpg" alt="Slide 2">
+                    <img src="assets/slider3.jpg" alt="Slide 3">
                 </div>
                 <div class="slide">
-                    <img src="assets/slider4.jpg" alt="Slide 3">
+                    <img src="assets/slider4.jpg" alt="Slide 4">
                 </div>
                 <div class="slide">
-                    <img src="assets/slider5.jpg" alt="Slide 1">
+                    <img src="assets/slider5.jpg" alt="Slide 5">
                 </div>
             </div>
         </div>
         <section id="home" class="banner">
             <div class="banner-content">
-                <h1>Arjun's Photography</h1>
+                <h1>Photography</h1>
                 <p>Capturing life's finest moments through my lens.</p>
             </div>
         </section>
@@ -86,7 +86,39 @@
             /* Toggle active class on nav */
             nav.classList.toggle('active');
         });
+        window.addEventListener('load', () => {
+        const images = document.querySelectorAll('.slide img');
+        let loadedCount = 0;
 
+        images.forEach((img) => {
+        if (img.complete) {
+            loadedCount++;
+        } else {
+            img.addEventListener('load', () => {
+            loadedCount++;
+            if (loadedCount === images.length) {
+                startAnimation();
+            }
+            });
+            img.addEventListener('error', () => {
+            loadedCount++;
+            if (loadedCount === images.length) {
+                startAnimation();
+            }
+            });
+        }
+        });
+
+        // If all images were already cached and loaded
+        if (loadedCount === images.length) {
+        startAnimation();
+        }
+
+        function startAnimation() {
+        const track = document.querySelector('.slide-track');
+        track.style.animation = 'scroll 30s linear infinite';
+        }
+    });
     </script>
 
 </body>
