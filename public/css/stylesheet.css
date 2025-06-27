@@ -195,3 +195,128 @@ nav a {
 
 /* about page */
 
+#aboutpage {
+    background-color: #c2dee2;
+    width: 100vw;
+    overflow-x: hidden;
+}
+
+#aboutBackground {
+    overflow: visible;
+    position: absolute;
+    padding: 0;
+    z-index: -1;
+}
+
+.background-image {
+    width: 100vw;
+    object-fit: cover;
+}
+
+.about-image {
+    height: 40vh;
+    object-fit: cover;
+    display: block;
+    padding: 20px;
+    aspect-ratio: 1;
+}
+
+@keyframes fadeInLeft {
+	0% {
+		opacity: 0;
+        transform: translateX(-25vw);
+	}
+	100% {
+		opacity: 1;
+        transform: translateX(-5vw);
+	}
+}
+
+@keyframes fadeInRight {
+	0% {
+		opacity: 0;
+        transform: translateX(25vw);
+	}
+	100% {
+		opacity: 1;
+        transform: translateX(5vw);
+	}
+}
+
+.about-containers {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 2rem;
+    width: 100vw;
+}
+
+.about-image-container-left, .about-image-container-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    height: fit-content;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.1);
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+}
+
+.about-image-container-left {
+    transform: translateX(-5vw);
+}
+
+.about-image-container-right {
+    transform: translateX(5vw);
+}
+
+@media (max-width: 768px) {
+    @keyframes fadeInLeft {
+        0% {
+            opacity: 0;
+            transform: translateX(-25vw);
+        }
+        100% {
+            opacity: 1;
+            transform: translateX(0vw);
+        }
+    }
+
+    @keyframes fadeInRight {
+        0% {
+            opacity: 0;
+            transform: translateX(25vw);
+        }
+        100% {
+            opacity: 1;
+            transform: translateX(0vw);
+        }
+    }
+    .about-image-container-left {
+        transform: translateX(-0vw);
+    }
+
+    .about-image-container-right {
+        transform: translateX(0vw);
+    }
+}
+
+
+.about-image-container-left.visible {
+    animation: fadeInLeft 0.75s ease-out;
+    opacity: 1;
+}
+
+.about-image-container-right.visible {
+    animation: fadeInRight 0.75s ease-out;
+    opacity: 1;
+}
+
+.about-text {
+    font-size: 2rem;
+}

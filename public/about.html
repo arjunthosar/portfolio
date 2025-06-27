@@ -2,12 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="css/stylesheet.css">
 </head>
-<body id="darkbackground">
+<body id="aboutpage">
+    <!-- Background -->
+    <div id="aboutBackground">
+        <img src="assets/aboutBackground.webp" alt="Background Image" class="background-image">
+        <img src="assets/aboutBackground2.webp" alt="Background Image" class="background-image">
+        <img src="assets/aboutBackground3.webp" alt="Background Image" class="background-image">
+    </div>
     <header>
         <div class="logo"><a href="index.html">arjun.pics</a></div>
         <div class="menu-toggle" id="toggle">&#9776;</div>
@@ -19,6 +24,24 @@
         </nav>
     </header>
 
+    <div class="about-containers">
+        <div class="about-image-container-left"><img src="assets/aboutimg1.webp" alt="About Image" class="about-image"><p class="about-text">
+            Arjun Thosar
+        </p></div>
+        <div class="about-image-container-right"><img src="assets/aboutimg2.webp" alt="About Image" class="about-image"><p class="about-text">
+            About Me
+        </p></div>
+        <div class="about-image-container-left"><img src="assets/aboutimg3.webp" alt="About Image" class="about-image"><p class="about-text">
+            About Me
+        </p></div>
+        <div class="about-image-container-right"><img src="assets/aboutimg6.webp" alt="About Image" class="about-image"><p class="about-text">
+            About Me
+        </p></div>
+        <div class="about-image-container-left"><img src="assets/aboutimg5.webp" alt="About Image" class="about-image"><p class="about-text">
+            About Me
+        </p></div>
+    </div>
+
     <script>
         /* Get menu toggle element */
         const toggle = document.getElementById('toggle');
@@ -29,6 +52,23 @@
         toggle.addEventListener('click', () => {
             /* Toggle active class on nav */
             nav.classList.toggle('active');
+        });
+
+        /* animation on scroll */
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target); // Animate once
+
+            }
+            });
+        }, {
+            threshold: 0.1 // Trigger when 10% visible
+        });
+
+        document.querySelectorAll('.about-image-container-left, .about-image-container-right').forEach(el => {
+            observer.observe(el);
         });
     </script>
 </body>
