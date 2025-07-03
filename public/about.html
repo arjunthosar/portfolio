@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>About Me</title>
     <link rel="stylesheet" href="css/stylesheet.css">
 </head>
-<body id="aboutpage">
+<body>
     <!-- Background -->
     <div id="aboutBackground">
-        <img src="assets/aboutBackground.webp" alt="Background Image" class="background-image">
-        <img src="assets/aboutBackground2.webp" alt="Background Image" class="background-image">
-        <img src="assets/aboutBackground3.webp" alt="Background Image" class="background-image">
+        <img src="assets/aboutBackground.webp" alt="Background Image" class="background-image" id="bg1">
+        <img src="assets/aboutBackground2.webp" alt="Background Image" class="background-image" id="bg2">
     </div>
     <header>
         <div class="logo"><a href="index.html">arjun.pics</a></div>
@@ -19,7 +18,7 @@
         <nav id="nav">
             <a href="index.html">Home</a>
             <a href="about.html">About</a>
-            <a href="#gallery">Gallery</a>
+            <a href="gallery.html">Gallery</a>
             <a href="#contact">Contact</a>
         </nav>
     </header>
@@ -28,19 +27,20 @@
         <div class="about-image-container-left"><img src="assets/aboutimg1.webp" alt="About Image" class="about-image"><p class="about-text">
             Arjun Thosar
         </p></div>
-        <div class="about-image-container-right"><img src="assets/aboutimg2.webp" alt="About Image" class="about-image"><p class="about-text">
+        <div class="about-image-container-right"><img src="assets/aboutimg3.webp" alt="About Image" class="about-image"><p class="about-text">
             About Me
         </p></div>
-        <div class="about-image-container-left"><img src="assets/aboutimg3.webp" alt="About Image" class="about-image"><p class="about-text">
+        <div class="about-image-container-left"><img src="assets/aboutimg6.webp" alt="About Image" class="about-image"><p class="about-text">
             About Me
         </p></div>
-        <div class="about-image-container-right"><img src="assets/aboutimg6.webp" alt="About Image" class="about-image"><p class="about-text">
-            About Me
-        </p></div>
-        <div class="about-image-container-left"><img src="assets/aboutimg5.webp" alt="About Image" class="about-image"><p class="about-text">
+        <div class="about-image-container-right"><img src="assets/aboutimg5.webp" alt="About Image" class="about-image"><p class="about-text">
             About Me
         </p></div>
     </div>
+
+    <footer>
+        <p>Arjun Thosar</p>
+    </footer>
 
     <script>
         /* Get menu toggle element */
@@ -64,12 +64,46 @@
             }
             });
         }, {
-            threshold: 0.1 // Trigger when 10% visible
+            threshold: 0.2 // Trigger when 20% visible
         });
 
         document.querySelectorAll('.about-image-container-left, .about-image-container-right').forEach(el => {
             observer.observe(el);
         });
+
+        const backgrounds = [
+            'assets/aboutBackground.webp',
+            'assets/DSC01962.webp',
+            'assets/aboutBackground2.webp',
+            'assets/DSC05319.webp'
+        ]
+
+        let index = 0;
+        let showingBg1 = true;
+
+        const bg1 = document.getElementById('bg1');
+        const bg2 = document.getElementById('bg2');
+
+        bg1.src = backgrounds[0];
+        bg1.style.opacity = 1;
+        bg2.style.opacity = 0;
+
+        setInterval(() => {
+            index = (index + 1) % backgrounds.length;
+            const nextBackground = backgrounds[index];
+
+            if (showingBg1) {
+                bg2.src = nextBackground;
+                bg2.style.opacity = 1;
+                bg1.style.opacity = 0;
+                showingBg1 = false;
+            } else {
+                bg1.src = nextBackground;
+                bg1.style.opacity = 1;
+                bg2.style.opacity = 0;
+                showingBg1 = true;
+            }
+        }, 5000)
     </script>
 </body>
 </html>

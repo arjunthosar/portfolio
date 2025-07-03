@@ -5,6 +5,11 @@
     box-sizing: border-box;
 }
 
+html {
+    overflow-x: hidden;
+    width: 100%;
+}
+
 @font-face {
     font-family: 'Zain';
     src: url('../assets/Zain-Regular.ttf') format('truetype');
@@ -82,7 +87,7 @@ nav a {
     /* Make nav display as flex box */
     flex-direction: column;
     /* Make nav background color dark */
-    background-color: #222;
+    background-color: rgba(0, 0, 0, 0.7);
     /* Make nav position absolute */
     position: absolute;
     /* Make nav top position 60px */
@@ -93,6 +98,7 @@ nav a {
     width: 200px;
     /* Add padding to nav */
     padding: 1rem;
+    border-radius: 35px;
     /* On top of everything */
     z-index: 3;
     }
@@ -192,26 +198,35 @@ nav a {
 .banner p {
     font-size: 2rem;
 }
-
 /* about page */
 
-#aboutpage {
+/* #aboutpage {
     background-color: #c2dee2;
     width: 100vw;
     overflow-x: hidden;
-}
+} */
 
 #aboutBackground {
-    overflow: visible;
-    position: absolute;
-    padding: 0;
+    position: fixed;
+    top: 0;   
+    left: 0;  
+    width: 100%; 
+    height: 100%; 
+    line-height: 0;
     z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
 }
 
 .background-image {
+    position: absolute;
+    height: 100vh;
     width: 100vw;
     object-fit: cover;
+    transition: opacity 1s ease;
+    opacity: 1;
 }
+
 
 .about-image {
     height: 40vh;
@@ -224,22 +239,22 @@ nav a {
 @keyframes fadeInLeft {
 	0% {
 		opacity: 0;
-        transform: translateX(-25vw);
+        transform: translateX(-30vw);
 	}
 	100% {
 		opacity: 1;
-        transform: translateX(-5vw);
+        transform: translateX(-15vw);
 	}
 }
 
 @keyframes fadeInRight {
 	0% {
 		opacity: 0;
-        transform: translateX(25vw);
+        transform: translateX(30vw);
 	}
 	100% {
 		opacity: 1;
-        transform: translateX(5vw);
+        transform: translateX(15vw);
 	}
 }
 
@@ -249,6 +264,7 @@ nav a {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
+    margin: 100px 0;
     gap: 2rem;
     width: 100vw;
 }
@@ -260,7 +276,7 @@ nav a {
     justify-content: center;
     width: fit-content;
     height: fit-content;
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.6);
     border-radius: 20px;
     box-shadow: 0 0 10px 0 rgba(0,0,0,0.1);
     opacity: 0;
@@ -268,11 +284,11 @@ nav a {
 }
 
 .about-image-container-left {
-    transform: translateX(-5vw);
+    transform: translateX(-15vw);
 }
 
 .about-image-container-right {
-    transform: translateX(5vw);
+    transform: translateX(15vw);
 }
 
 @media (max-width: 768px) {
@@ -320,3 +336,20 @@ nav a {
 .about-text {
     font-size: 2rem;
 }
+
+#aboutpage footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    height: 300px;
+    background: linear-gradient(to top, rgba(34, 34, 34, 1), rgba(34, 34, 34, 0));
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+
+footer p {
+    position: relative;
+    bottom: 0;
+}
+
