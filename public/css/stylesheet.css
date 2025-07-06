@@ -347,3 +347,15 @@ footer p {
     bottom: 0;
 }
 
+/* gallery page */
+#gallery-container {
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    width: 100vw;
+}
+
+#galleryimg {
+    width:25vw;
+    padding: 20px;
+}
