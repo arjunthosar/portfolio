@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="css/stylesheet.css">
 </head>
 <body>
+    <div id="gallery-bg1" class="gallery-bg-layer"></div>
+    <div id="gallery-bg2" class="gallery-bg-layer"></div>
     <header>
         <div class="logo"><a href="index.html">arjun.pics</a></div>
         <div class="menu-toggle" id="toggle">&#9776;</div>
@@ -35,13 +37,85 @@
             nav.classList.toggle('active');
         });
 
+        /* Generate gallery */
         const gallerydiv = document.getElementById('gallery-container');
-        for (var i = 1; i < 179; i++) {
+        const nums = Array.from({length: 176}, (v, k) => k + 1);
+        while (nums.length > 0) {
+            const i = nums.splice(Math.floor(Math.random() * nums.length), 1)[0];
             const image = document.createElement('img');
             image.src = 'assets/gallery/gallery' + i + '.jpg';
-            image.id = 'galleryimg';
+            image.className = 'galleryimg';
             gallerydiv.appendChild(image);
         }
+
+        /* set background color based on current image */
+        function getAverageRGB(imgEl) {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+
+            const width = canvas.width = imgEl.naturalWidth || imgEl.width;
+            const height = canvas.height = imgEl.naturalHeight || imgEl.height;
+
+            context.drawImage(imgEl, 0, 0, width, height);
+            let data;
+            try {
+                data = context.getImageData(0, 0, width, height);
+            } catch (e) {
+                return { r: 0, g: 0, b: 0 };
+            }
+
+            const pixels = data.data;
+            let r = 0, g = 0, b = 0, count = 0;
+
+            const step = 5 * 4;
+            for (let i = 0; i < pixels.length; i += step) {
+                r += pixels[i];
+                g += pixels[i + 1];
+                b += pixels[i + 2];
+                count++;
+            }
+
+            return {
+                r: Math.round(r / count),
+                g: Math.round(g / count),
+                b: Math.round(b / count)
+            };
+        }
+        
+        var activeBg = 0;
+        var lastImage;
+        function updateBackgroundColorFromVisibleImage() {
+            const images = document.querySelectorAll('img.galleryimg');
+            for (let i = 0; i < images.length - 1; i++) {
+                const rect = images[i].getBoundingClientRect();
+                if (rect.top >= 0 && rect.bottom <= window.innerHeight) {
+                    if (lastImage === images[i]) {
+                        break;
+                    }
+                    const rgb1 = getAverageRGB(images[i]);
+                    const rgb2 = getAverageRGB(images[i + 1]);
+                    bg1 = document.getElementById('gallery-bg1');
+                    bg2 = document.getElementById('gallery-bg2');
+                    if (activeBg === 1) {
+                        bg2.style.background = `linear-gradient(to right, rgb(${rgb1.r}, ${rgb1.g}, ${rgb1.b}), rgb(${rgb2.r}, ${rgb2.g}, ${rgb2.b}))`;
+                        bg1.style.opacity = 0;
+                        bg2.style.opacity = 1;
+                        activeBg = 2;
+                    } else {
+                        bg1.style.background = `linear-gradient(to right, rgb(${rgb1.r}, ${rgb1.g}, ${rgb1.b}), rgb(${rgb2.r}, ${rgb2.g}, ${rgb2.b}))`;
+                        bg1.style.opacity = 1;
+                        bg2.style.opacity = 0;
+                        activeBg = 1;
+                    }
+                    lastImage = images[i];
+                    break;
+                }
+            }
+        }
+
+        // Run on scroll and on load
+        window.addEventListener('scroll', updateBackgroundColorFromVisibleImage);
+        window.addEventListener('load', updateBackgroundColorFromVisibleImage);
     </script>
 </body>
 </html>
