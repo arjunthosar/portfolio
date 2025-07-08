@@ -389,7 +389,9 @@ footer p {
 }
 
 @media (max-width: 768px) {
-    #galleryimg{
+    .galleryimg{
+        max-width: none;
         width: 74vw;
+        height: auto;
     }
 }
