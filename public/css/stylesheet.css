@@ -7,7 +7,7 @@
 
 html {
     overflow-x: hidden;
-    width: 100%;
+    width: 100vw;
 }
 
 @font-face {
@@ -38,6 +38,7 @@ header {
     justify-content: space-between;
     /* Align header content to center */
     align-items: center;
+    width: 100vw;
 }
 
 
@@ -214,10 +215,12 @@ nav a {
 
 .background-image {
     position: absolute;
+    top: 0;
+    left: 0;
     height: 100vh;
     width: 100vw;
     object-fit: cover;
-    transition: opacity 1s ease;
+    /* transition: opacity 1s ease; */
     opacity: 1;
 }
 
@@ -331,7 +334,7 @@ nav a {
     font-size: 2rem;
 }
 
-#aboutpage footer {
+footer {
     position: relative;
     bottom: 0;
     width: 100%;
@@ -357,8 +360,6 @@ footer p {
   top: 0; left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: -1;
-  transition: opacity 0.5s ease;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -367,10 +368,12 @@ footer p {
 
 #gallery-bg1 {
   opacity: 1;
+  z-index: -1;
 }
 
 #gallery-bg2 {
   opacity: 0;
+  z-index: -2;
 }
 
 #gallery-container {
@@ -394,4 +397,32 @@ footer p {
         width: 74vw;
         height: auto;
     }
+}
+
+.fullscreen-img {
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform-origin: center center;
+  transition: all 0.5s ease;
+  z-index: 1000;
+  pointer-events: none;
+  will-change: transform, top, left, width, height;
+}
+
+.fullscreen-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#filters-container {
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
 }

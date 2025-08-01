@@ -99,17 +99,72 @@ function getAverageRGBLeftRight(imgEl) {
     }];
 }
 
+document.addEventListener('click', function(e) {
+    if (!e.target.classList.contains('galleryimg')) return;
+
+    const original = e.target;
+    const rect = original.getBoundingClientRect();
+
+    const clone = original.cloneNode();
+    clone.classList.add('fullscreen-img')
+    clone.style.top = rect.top + 'px';
+    clone.style.left = rect.left + 'px';
+    clone.style.width = rect.width + 'px';
+    clone.style.height = rect.height + 'px';
+
+    const overlay = document.createElement('div');
+    overlay.className = 'fullscreen-overlay';
+    document.body.appendChild(overlay);
+
+    document.body.appendChild(clone);
+
+    void clone.offsetWidth;
+
+    //Animate to center
+    clone.style.transform = 'translate(-50%, -50%)';
+    clone.style.top = '50%';
+    clone.style.left = '50%';
+    const scale = 1.5;
+    const aspectRatio = original.naturalWidth / original.naturalHeight;
+    if (window.innerWidth <= 768) {
+        clone.style.width = '90vw';
+        clone.style.height = (0.90*window.innerWidth/aspectRatio) + 'px';
+    } else {
+        clone.style.maxWidth = 'none';
+        clone.style.width = (original.width * scale) + 'px';
+        clone.style.height = (clone.width*1.5 / aspectRatio) + 'px';
+    }
+    clone.style.maxHeight = 'none';
+
+    overlay.style.opacity = 1;
+    const imgRGB = getAverageRGBLeftRight(original);
+    overlay.style.background = `linear-gradient(to right, rgba(${imgRGB[0].r}, ${imgRGB[0].g}, ${imgRGB[0].b}), rgba(${imgRGB[1].r}, ${imgRGB[1].g}, ${imgRGB[1].b}))`;
+
+    function close() {
+        overlay.style.opacity = 0;
+        clone.style.transform = 'translate(-50%, -50%) scale(0.8)';
+        clone.style.opacity = 0;
+        setTimeout(() => {
+            clone.remove();
+            overlay.remove();
+        }, 300);
+    }
+
+    overlay.addEventListener('click', close);
+    clone.addEventListener('click', close);
+})
+
 var activeBg = 0;
 var lastImage;
 function updateBackgroundColorFromVisibleImage() {
     const images = document.querySelectorAll('img.galleryimg');
     for (let i = 0; i < images.length - 1; i++) {
         const rect = images[i].getBoundingClientRect();
-        if (rect.top >= window.innerHeight*.2 && rect.bottom <= window.innerHeight) {
+        if (window.innerWidth >= 768 ? (rect.top >= 0) : (rect.top >= window.innerHeight*0.15) && rect.bottom <= window.innerHeight) {
             if (lastImage === images[i]) {
                 break;
             }
-            var rgb1, rgb2;
+            var rgb1, rgb2, rgb3;
             if (window.innerWidth < 768) {
                 const rgbLR = getAverageRGBLeftRight(images[i]);
                 rgb1 = rgbLR[0];
@@ -117,18 +172,26 @@ function updateBackgroundColorFromVisibleImage() {
             } else {
                 rgb1 = getAverageRGB(images[i]);
                 rgb2 = getAverageRGB(images[i + 1]);
+                if (images[i].width + images[i+1].width + images[i+2].width <= window.innerWidth * 0.74) {
+                    rgb3 = getAverageRGB(images[i + 2]);
+                }
             }
             bg1 = document.getElementById('gallery-bg1');
             bg2 = document.getElementById('gallery-bg2');
             if (activeBg === 1) {
-                bg2.style.background = `linear-gradient(to right, rgb(${rgb1.r}, ${rgb1.g}, ${rgb1.b}), rgb(${rgb2.r}, ${rgb2.g}, ${rgb2.b}))`;
-                bg1.style.opacity = 0;
+                bg2.style.zIndex = -1;
+                bg1.style.zIndex = -2;
+                bg2.style.background = `linear-gradient(to right, rgb(${rgb1.r}, ${rgb1.g}, ${rgb1.b}), rgb(${rgb2.r}, ${rgb2.g}, ${rgb2.b})` + (rgb3 ? `, rgb(${rgb3.r}, ${rgb3.g}, ${rgb3.b})` : '') + ')';
+                bg2.style.transition = 'opacity .5s ease';
                 bg2.style.opacity = 1;
+
                 activeBg = 2;
             } else {
-                bg1.style.background = `linear-gradient(to right, rgb(${rgb1.r}, ${rgb1.g}, ${rgb1.b}), rgb(${rgb2.r}, ${rgb2.g}, ${rgb2.b}))`;
+                bg1.style.zIndex = -1;
+                bg2.style.zIndex = -2;
+                bg1.style.background = `linear-gradient(to right, rgb(${rgb1.r}, ${rgb1.g}, ${rgb1.b}), rgb(${rgb2.r}, ${rgb2.g}, ${rgb2.b})` + (rgb3 ? `, rgb(${rgb3.r}, ${rgb3.g}, ${rgb3.b})` : '') + ')';
+                bg1.style.transition = 'opacity .5s ease';
                 bg1.style.opacity = 1;
-                bg2.style.opacity = 0;
                 activeBg = 1;
             }
             lastImage = images[i];
@@ -137,11 +200,21 @@ function updateBackgroundColorFromVisibleImage() {
     }
 }
 
+document.querySelector('#gallery-bg1').addEventListener('transitionend', () => {
+    bg2.style.transition = 'none';
+    bg2.style.opacity = 0;
+})
+
+document.querySelector('#gallery-bg2').addEventListener('transitionend', () => {
+    bg1.style.transition = 'none';
+    bg1.style.opacity = 0;
+})
+
 let lastScrollY = window.scrollY;
 let lastTime = Date.now();
 
 // scroll speed threshold (pixels per ms)
-const SPEED_THRESHOLD = 1.5;
+const SPEED_THRESHOLD = .25;
 
 // Debounce timer to avoid spamming
 let scrollTimeout;
