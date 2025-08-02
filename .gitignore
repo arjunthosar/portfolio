@@ -1,1 +1,3 @@
-/public/assets/gallery
+/public/assets/gallery/*.jpg
+/public/assets/gallery/api.env
+/public/assets/gallery/image_categories.json

@@ -12,13 +12,25 @@ toggle.addEventListener('click', () => {
 /* Generate gallery */
 const gallerydiv = document.getElementById('gallery-container');
 const nums = Array.from({length: 176}, (v, k) => k + 1);
-while (nums.length > 0) {
-    const i = nums.splice(Math.floor(Math.random() * nums.length), 1)[0];
-    const image = document.createElement('img');
-    image.src = 'assets/gallery/gallery' + i + '.jpg';
-    image.className = 'galleryimg';
-    gallerydiv.appendChild(image);
-}
+fetch('js/image_categories.json')
+    .then(response => response.json())
+    .then(jsonData => {
+        const data = jsonData;
+
+        while (nums.length > 0) {
+            const i = nums.splice(Math.floor(Math.random() * nums.length), 1)[0];
+            const image = document.createElement('img');
+            image.src = 'assets/gallery/' + i + '.jpg';
+            const filename = i + '.jpg';
+            const matched = data.find(item => item.filename === filename);
+            if (matched) {
+                image.dataset.category = matched.category;
+            }
+            image.className = 'galleryimg';
+            gallerydiv.appendChild(image);
+        }
+    })
+    .catch(error => console.error('Error loading JSON:', error));
 
 /* set background color based on current image */
 function getAverageRGB(imgEl) {
@@ -157,7 +169,7 @@ document.addEventListener('click', function(e) {
 var activeBg = 0;
 var lastImage;
 function updateBackgroundColorFromVisibleImage() {
-    const images = document.querySelectorAll('img.galleryimg');
+    const images = document.querySelectorAll('img.galleryimg:not([style*="display: none"])');
     for (let i = 0; i < images.length - 1; i++) {
         const rect = images[i].getBoundingClientRect();
         if (window.innerWidth >= 768 ? (rect.top >= 0) : (rect.top >= window.innerHeight*0.15) && rect.bottom <= window.innerHeight) {
@@ -240,3 +252,70 @@ function handleScroll() {
 // Run on scroll and on load
 window.addEventListener('scroll', handleScroll);
 window.addEventListener('load', updateBackgroundColorFromVisibleImage);
+const checkboxes = ['#random', '#nature', '#portraits', '#other', '#city'];
+
+checkboxes.forEach(id => {
+    document.querySelector(id).addEventListener('change', filterImages);
+})
+
+function filterImages() {
+    const images = document.querySelectorAll('img.galleryimg');
+    const checkedCategories = Array.from(checkboxes)
+        .filter(checkbox => document.querySelector(checkbox).checked)
+        .map(checkbox => checkbox.replace('#', ''));
+    images.forEach(img => {
+        const imgCategory = img.dataset.category;
+        if (checkedCategories.includes('random') || checkedCategories.includes(imgCategory)) {
+            img.style.display = '';
+        } else {
+            img.style.display = 'none';
+        }
+    });
+}
+
+document.querySelector('#random').addEventListener('change', function() {
+    if (this.checked) {
+        checkboxes.forEach(id => {
+            if (id !== '#random') {
+                document.querySelector(id).checked = true;
+            }
+        });
+    }
+});
+
+checkboxes.forEach(id => {
+    if (id !== '#random') {
+        document.querySelector(id).addEventListener('change', function() {
+            if (this.checked) {
+                document.querySelector('#random').checked = false;
+            }
+        });
+    }
+});
+
+
+
+let loadedCount = 0;
+const images = document.querySelectorAll('img.galleryimg');
+images.forEach(img => {
+    if (img.complete) {
+        loadedCount++;
+    } else {
+        img.addEventListener('load', () => {
+            loadedCount++;
+            if (loadedCount === images.length) {
+                document.body.classList.remove('loading');
+            }
+        });
+        img.addEventListener('error', () => {
+            loadedCount++;
+            if (loadedCount === images.length) {
+                document.body.classList.remove('loading');
+            }
+        });
+    }
+});
+
+if (loadedCount === images.length) {
+    document.body.classList.remove('loading');
+}

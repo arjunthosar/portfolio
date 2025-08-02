@@ -1,0 +1,706 @@
+[
+  {
+    "filename": "1.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "2.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "3.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "4.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "5.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "6.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "7.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "8.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "9.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "10.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "11.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "12.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "13.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "14.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "15.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "16.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "17.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "18.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "19.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "20.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "21.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "22.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "23.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "24.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "25.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "26.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "27.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "28.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "29.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "30.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "31.jpg",
+    "category": "city"
+  },
+  {
+    "filename": "32.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "33.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "34.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "35.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "36.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "37.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "38.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "39.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "40.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "41.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "42.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "43.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "44.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "45.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "46.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "47.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "48.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "49.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "50.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "51.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "52.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "53.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "54.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "55.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "56.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "57.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "58.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "59.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "60.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "61.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "62.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "63.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "64.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "65.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "66.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "67.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "68.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "69.jpg",
+    "category": "city"
+  },
+  {
+    "filename": "70.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "71.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "72.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "73.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "74.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "75.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "76.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "77.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "78.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "79.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "80.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "81.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "82.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "83.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "84.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "85.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "86.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "87.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "88.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "89.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "90.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "91.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "92.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "93.jpg",
+    "category": "city"
+  },
+  {
+    "filename": "94.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "95.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "96.jpg",
+    "category": "city"
+  },
+  {
+    "filename": "97.jpg",
+    "category": "city"
+  },
+  {
+    "filename": "98.jpg",
+    "category": "city"
+  },
+  {
+    "filename": "99.jpg",
+    "category": "city"
+  },
+  {
+    "filename": "100.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "101.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "102.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "103.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "104.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "105.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "106.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "107.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "108.jpg",
+    "category": "city"
+  },
+  {
+    "filename": "109.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "110.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "111.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "112.jpg",
+    "category": "city"
+  },
+  {
+    "filename": "113.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "114.jpg",
+    "category": "city"
+  },
+  {
+    "filename": "115.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "116.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "117.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "118.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "119.jpg",
+    "category": "city"
+  },
+  {
+    "filename": "120.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "121.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "122.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "123.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "124.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "125.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "126.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "127.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "128.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "129.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "130.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "131.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "132.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "133.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "134.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "135.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "136.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "137.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "138.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "139.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "140.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "141.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "142.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "143.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "144.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "145.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "146.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "147.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "148.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "149.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "150.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "151.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "152.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "153.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "154.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "155.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "156.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "157.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "158.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "159.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "160.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "161.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "162.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "163.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "164.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "165.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "166.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "167.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "168.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "169.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "170.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "171.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "172.jpg",
+    "category": "portraits"
+  },
+  {
+    "filename": "173.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "174.jpg",
+    "category": "other"
+  },
+  {
+    "filename": "175.jpg",
+    "category": "nature"
+  },
+  {
+    "filename": "176.jpg",
+    "category": "portraits"
+  }
+]
