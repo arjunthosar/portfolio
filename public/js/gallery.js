@@ -166,7 +166,7 @@ document.addEventListener('click', function(e) {
     clone.addEventListener('click', close);
 })
 
-var activeBg = 0;
+var activeBg = 1;
 var lastImage;
 function updateBackgroundColorFromVisibleImage() {
     const images = document.querySelectorAll('img.galleryimg:not([style*="display: none"])');
@@ -194,17 +194,18 @@ function updateBackgroundColorFromVisibleImage() {
                 bg2.style.zIndex = -1;
                 bg1.style.zIndex = -2;
                 bg2.style.background = `linear-gradient(to right, rgb(${rgb1.r}, ${rgb1.g}, ${rgb1.b}), rgb(${rgb2.r}, ${rgb2.g}, ${rgb2.b})` + (rgb3 ? `, rgb(${rgb3.r}, ${rgb3.g}, ${rgb3.b})` : '') + ')';
-                bg2.style.transition = 'opacity .5s ease';
+                bg2.style.transition = 'opacity .25s ease-in';
                 bg2.style.opacity = 1;
 
-                activeBg = 2;
-            } else {
+                activeBg = 0;
+            } else if (activeBg === 2) {
                 bg1.style.zIndex = -1;
                 bg2.style.zIndex = -2;
                 bg1.style.background = `linear-gradient(to right, rgb(${rgb1.r}, ${rgb1.g}, ${rgb1.b}), rgb(${rgb2.r}, ${rgb2.g}, ${rgb2.b})` + (rgb3 ? `, rgb(${rgb3.r}, ${rgb3.g}, ${rgb3.b})` : '') + ')';
-                bg1.style.transition = 'opacity .5s ease';
+                bg1.style.transition = 'opacity .25s ease-in';
                 bg1.style.opacity = 1;
-                activeBg = 1;
+
+                activeBg = 0;
             }
             lastImage = images[i];
             break;
@@ -215,21 +216,23 @@ function updateBackgroundColorFromVisibleImage() {
 document.querySelector('#gallery-bg1').addEventListener('transitionend', () => {
     bg2.style.transition = 'none';
     bg2.style.opacity = 0;
+    activeBg = 1;
 })
 
 document.querySelector('#gallery-bg2').addEventListener('transitionend', () => {
     bg1.style.transition = 'none';
     bg1.style.opacity = 0;
+    activeBg = 2;
 })
 
 let lastScrollY = window.scrollY;
 let lastTime = Date.now();
 
 // scroll speed threshold (pixels per ms)
-const SPEED_THRESHOLD = .25;
+const SPEED_THRESHOLD = .3;
 
 // Debounce timer to avoid spamming
-let scrollTimeout;
+let scrollTimeout; //TODO: make background update more responsive/faster
 
 function handleScroll() {
     const now = Date.now();
@@ -243,7 +246,7 @@ function handleScroll() {
     lastScrollY = currentScrollY;
     lastTime = now;
 
-    if (speed < SPEED_THRESHOLD) {
+    if (speed <= SPEED_THRESHOLD) {
         // only trigger if scroll is "slow"
         updateBackgroundColorFromVisibleImage();
     }
@@ -252,7 +255,7 @@ function handleScroll() {
 // Run on scroll and on load
 window.addEventListener('scroll', handleScroll);
 window.addEventListener('load', updateBackgroundColorFromVisibleImage);
-const checkboxes = ['#random', '#nature', '#portraits', '#other', '#city'];
+const checkboxes = ['#random', '#nature', '#portraits', '#macro', '#city', '#other'];
 
 checkboxes.forEach(id => {
     document.querySelector(id).addEventListener('change', filterImages);
@@ -286,7 +289,7 @@ document.querySelector('#random').addEventListener('change', function() {
 checkboxes.forEach(id => {
     if (id !== '#random') {
         document.querySelector(id).addEventListener('change', function() {
-            if (this.checked) {
+            if (!this.checked) {
                 document.querySelector('#random').checked = false;
             }
         });
