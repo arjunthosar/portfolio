@@ -383,7 +383,7 @@ footer p {
     flex-wrap: wrap;
     gap: 2vw;
     width: 100vw;
-    padding: 10vw;
+    padding: 0 10vw 10vw 10vw;
 }
 
 .galleryimg{
@@ -420,9 +420,59 @@ footer p {
 }
 
 #filters-container {
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: #868686;
+    border-radius: 20px;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.1);
+    padding: 20px;
+    margin: 20px auto;
+    width: fit-content;
+    max-width: 85vw;
+    height: fit-content;
+    gap: 20px;
+}
+
+.checkboxIcon {
+    width: 80px;
+    height: 80px;
+}
+
+.checkboxIcon:hover {
+    cursor: pointer;
+}
+
+#random {
+    background-color: transparent;
+    border: none;
+    width: 80px;
+    height: 80px;
+}
+
+#random:active {
+    filter: invert(1);
+}
+
+@media (max-width: 768px) {
+    .checkboxIcon {
+        width: 45px;
+        height: 45px;
+    }
+    #random {
+        width: 45px;
+        height: 45px;
+    }
+    #filters-container {
+        gap: 10px;
+    }
+}
+
+.checkboxAndIcon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }

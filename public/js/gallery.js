@@ -228,32 +228,8 @@ document.querySelector('#gallery-bg2').addEventListener('transitionend', () => {
 let lastScrollY = window.scrollY;
 let lastTime = Date.now();
 
-// scroll speed threshold (pixels per ms)
-const SPEED_THRESHOLD = .3;
-
-// Debounce timer to avoid spamming
-let scrollTimeout; //TODO: make background update more responsive/faster
-
-function handleScroll() {
-    const now = Date.now();
-    const currentScrollY = window.scrollY;
-
-    const deltaY = Math.abs(currentScrollY - lastScrollY);
-    const deltaTime = now - lastTime;
-
-    const speed = deltaY / deltaTime;
-
-    lastScrollY = currentScrollY;
-    lastTime = now;
-
-    if (speed <= SPEED_THRESHOLD) {
-        // only trigger if scroll is "slow"
-        updateBackgroundColorFromVisibleImage();
-    }
-}
-
 // Run on scroll and on load
-window.addEventListener('scroll', handleScroll);
+window.addEventListener('scroll', updateBackgroundColorFromVisibleImage);
 window.addEventListener('load', updateBackgroundColorFromVisibleImage);
 const checkboxes = ['#random', '#nature', '#portraits', '#macro', '#city', '#other'];
 
@@ -303,17 +279,23 @@ const images = document.querySelectorAll('img.galleryimg');
 images.forEach(img => {
     if (img.complete) {
         loadedCount++;
+        if (loadedCount >= 6) {
+            document.body.classList.remove('loading');
+            updateBackgroundColorFromVisibleImage();
+        }
     } else {
         img.addEventListener('load', () => {
             loadedCount++;
-            if (loadedCount === images.length) {
+            if (loadedCount >= 6) {
                 document.body.classList.remove('loading');
+                updateBackgroundColorFromVisibleImage();
             }
         });
         img.addEventListener('error', () => {
             loadedCount++;
-            if (loadedCount === images.length) {
+            if (loadedCount >= 6) {
                 document.body.classList.remove('loading');
+                updateBackgroundColorFromVisibleImage();
             }
         });
     }
