@@ -399,7 +399,7 @@ footer p {
     }
 }
 
-.fullscreen-img {
+#fullscreen-img {
   position: fixed;
   top: 0;
   left: 0;
@@ -475,4 +475,48 @@ footer p {
     align-items: center;
     justify-content: center;
     gap: 10px;
+}
+
+#close-icon {
+    width: 50px;
+    height: 50px;
+    filter: invert(1);
+    opacity: 0.5;
+}
+
+#close-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    cursor: pointer;
+    z-index: 1001;
+    transition: opacity 0.2s ease;
+}
+
+#next-icon {
+    width: 150px;
+    height: 150px;
+    filter: invert(1);
+    opacity: 0.5;
+}
+
+#next-button {
+    position: absolute;
+    top: calc(50vh - 75px);
+    right: 20px;
+    cursor: pointer;
+}
+
+#prev-icon {
+    width: 150px;
+    height: 150px;
+    filter: invert(1);
+    opacity: 0.5;
+}
+
+#prev-button {
+    position: absolute;
+    top: calc(50vh - 75px);
+    left: 20px;
+    cursor: pointer;
 }

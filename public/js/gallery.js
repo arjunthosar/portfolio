@@ -113,12 +113,12 @@ function getAverageRGBLeftRight(imgEl) {
 
 document.addEventListener('click', function(e) {
     if (!e.target.classList.contains('galleryimg')) return;
-
-    const original = e.target;
+    document.body.style.overflowY = 'hidden';
+    var original = e.target;
     const rect = original.getBoundingClientRect();
 
     const clone = original.cloneNode();
-    clone.classList.add('fullscreen-img')
+    clone.id = 'fullscreen-img'
     clone.style.top = rect.top + 'px';
     clone.style.left = rect.left + 'px';
     clone.style.width = rect.width + 'px';
@@ -127,7 +127,6 @@ document.addEventListener('click', function(e) {
     const overlay = document.createElement('div');
     overlay.className = 'fullscreen-overlay';
     document.body.appendChild(overlay);
-
     document.body.appendChild(clone);
 
     void clone.offsetWidth;
@@ -151,19 +150,86 @@ document.addEventListener('click', function(e) {
     overlay.style.opacity = 1;
     const imgRGB = getAverageRGBLeftRight(original);
     overlay.style.background = `linear-gradient(to right, rgba(${imgRGB[0].r}, ${imgRGB[0].g}, ${imgRGB[0].b}), rgba(${imgRGB[1].r}, ${imgRGB[1].g}, ${imgRGB[1].b}))`;
+    clone.style.transition = 'left, right, opacity .25s ease-out';
+
+    const closeButton = document.createElement('div');
+    const closeIcon = document.createElement('img');
+    closeIcon.src = 'assets/closeIcon.png';
+    closeIcon.id = 'close-icon';
+    closeButton.appendChild(closeIcon);
+    closeButton.id = 'close-button';
+    closeButton.addEventListener('click', close);
+    overlay.appendChild(closeButton);
+
+    const images = document.querySelectorAll('img.galleryimg:not([style*="display: none"])');
+    var originalIndex = Array.from(images).indexOf(original);
+    console.log(originalIndex);
+    if (images[originalIndex + 1]) {
+        const nextButton = document.createElement('div');
+        const nextIcon = document.createElement('img');
+        nextIcon.src = 'assets/rightArrow.png';
+        nextIcon.id = 'next-icon';
+        nextButton.appendChild(nextIcon);
+        nextButton.id = 'next-button';
+        nextButton.addEventListener('click', () => {
+            originalIndex += 1;
+            original = images[originalIndex];
+            document.getElementById('fullscreen-img').src = original.src;
+            const imgRGB = getAverageRGBLeftRight(original);
+            overlay.style.background = `linear-gradient(to right, rgba(${imgRGB[0].r}, ${imgRGB[0].g}, ${imgRGB[0].b}), rgba(${imgRGB[1].r}, ${imgRGB[1].g}, ${imgRGB[1].b}))`;
+            const aspectRatio = original.naturalWidth / original.naturalHeight;
+            if (window.innerWidth <= 768) {
+                clone.style.width = '90vw';
+                clone.style.height = (0.90*window.innerWidth/aspectRatio) + 'px';
+            } else {
+                clone.style.maxWidth = 'none';
+                clone.style.width = (original.width * scale) + 'px';
+                clone.style.height = (original.width * scale / aspectRatio) + 'px';
+                console.log(images[originalIndex], aspectRatio, clone.width, clone.height);
+            }
+        })
+        overlay.appendChild(nextButton);
+    }
+    if (images[originalIndex - 1]) {
+        const prevButton = document.createElement('div');
+        const prevIcon = document.createElement('img');
+        prevIcon.src = 'assets/leftArrow.png';
+        prevIcon.id = 'prev-icon';
+        prevButton.appendChild(prevIcon);
+        prevButton.id = 'prev-button';
+        prevButton.addEventListener('click', () => {
+            originalIndex -= 1;
+            original = images[originalIndex];
+            document.getElementById('fullscreen-img').src = original.src;
+            const imgRGB = getAverageRGBLeftRight(original);
+            overlay.style.background = `linear-gradient(to right, rgba(${imgRGB[0].r}, ${imgRGB[0].g}, ${imgRGB[0].b}), rgba(${imgRGB[1].r}, ${imgRGB[1].g}, ${imgRGB[1].b}))`;
+            const aspectRatio = original.naturalWidth / original.naturalHeight;
+            if (window.innerWidth <= 768) {
+                clone.style.width = '90vw';
+                clone.style.height = (0.90*window.innerWidth/aspectRatio) + 'px';
+            } else {
+                clone.style.maxWidth = 'none';
+                clone.style.width = (original.width * scale) + 'px';
+                clone.style.height = (original.width * scale / aspectRatio) + 'px';
+                console.log(images[originalIndex], aspectRatio, clone.width, clone.height);
+            }
+        })
+        overlay.appendChild(prevButton);
+    }
+
 
     function close() {
+        document.body.style.overflow = 'auto';
         overlay.style.opacity = 0;
         clone.style.transform = 'translate(-50%, -50%) scale(0.8)';
         clone.style.opacity = 0;
+        closeButton.style.opacity = 0;
         setTimeout(() => {
             clone.remove();
             overlay.remove();
+            closeButton.remove();
         }, 300);
     }
-
-    overlay.addEventListener('click', close);
-    clone.addEventListener('click', close);
 })
 
 var activeBg = 1;
