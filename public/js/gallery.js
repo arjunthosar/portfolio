@@ -143,7 +143,7 @@ document.addEventListener('click', function(e) {
     } else {
         clone.style.maxWidth = 'none';
         clone.style.width = (original.width * scale) + 'px';
-        clone.style.height = (clone.width*1.5 / aspectRatio) + 'px';
+        clone.style.height = (original.width * scale / aspectRatio) + 'px';
     }
     clone.style.maxHeight = 'none';
 
@@ -171,23 +171,7 @@ document.addEventListener('click', function(e) {
         nextIcon.id = 'next-icon';
         nextButton.appendChild(nextIcon);
         nextButton.id = 'next-button';
-        nextButton.addEventListener('click', () => {
-            originalIndex += 1;
-            original = images[originalIndex];
-            document.getElementById('fullscreen-img').src = original.src;
-            const imgRGB = getAverageRGBLeftRight(original);
-            overlay.style.background = `linear-gradient(to right, rgba(${imgRGB[0].r}, ${imgRGB[0].g}, ${imgRGB[0].b}), rgba(${imgRGB[1].r}, ${imgRGB[1].g}, ${imgRGB[1].b}))`;
-            const aspectRatio = original.naturalWidth / original.naturalHeight;
-            if (window.innerWidth <= 768) {
-                clone.style.width = '90vw';
-                clone.style.height = (0.90*window.innerWidth/aspectRatio) + 'px';
-            } else {
-                clone.style.maxWidth = 'none';
-                clone.style.width = (original.width * scale) + 'px';
-                clone.style.height = (original.width * scale / aspectRatio) + 'px';
-                console.log(images[originalIndex], aspectRatio, clone.width, clone.height);
-            }
-        })
+        nextButton.addEventListener('click', next);
         overlay.appendChild(nextButton);
     }
     if (images[originalIndex - 1]) {
@@ -197,23 +181,7 @@ document.addEventListener('click', function(e) {
         prevIcon.id = 'prev-icon';
         prevButton.appendChild(prevIcon);
         prevButton.id = 'prev-button';
-        prevButton.addEventListener('click', () => {
-            originalIndex -= 1;
-            original = images[originalIndex];
-            document.getElementById('fullscreen-img').src = original.src;
-            const imgRGB = getAverageRGBLeftRight(original);
-            overlay.style.background = `linear-gradient(to right, rgba(${imgRGB[0].r}, ${imgRGB[0].g}, ${imgRGB[0].b}), rgba(${imgRGB[1].r}, ${imgRGB[1].g}, ${imgRGB[1].b}))`;
-            const aspectRatio = original.naturalWidth / original.naturalHeight;
-            if (window.innerWidth <= 768) {
-                clone.style.width = '90vw';
-                clone.style.height = (0.90*window.innerWidth/aspectRatio) + 'px';
-            } else {
-                clone.style.maxWidth = 'none';
-                clone.style.width = (original.width * scale) + 'px';
-                clone.style.height = (original.width * scale / aspectRatio) + 'px';
-                console.log(images[originalIndex], aspectRatio, clone.width, clone.height);
-            }
-        })
+        prevButton.addEventListener('click', prev);
         overlay.appendChild(prevButton);
     }
 
@@ -230,6 +198,89 @@ document.addEventListener('click', function(e) {
             closeButton.remove();
         }, 300);
     }
+
+    function next() {
+        originalIndex += 1;
+        original = images[originalIndex];
+        document.getElementById('fullscreen-img').src = original.src;
+        const imgRGB = getAverageRGBLeftRight(original);
+        overlay.style.background = `linear-gradient(to right, rgba(${imgRGB[0].r}, ${imgRGB[0].g}, ${imgRGB[0].b}), rgba(${imgRGB[1].r}, ${imgRGB[1].g}, ${imgRGB[1].b}))`;
+        const aspectRatio = original.naturalWidth / original.naturalHeight;
+        if (window.innerWidth <= 768) {
+            clone.style.width = '90vw';
+            clone.style.height = (0.90*window.innerWidth/aspectRatio) + 'px';
+        } else {
+            clone.style.maxWidth = 'none';
+            clone.style.width = (original.width * scale) + 'px';
+            clone.style.height = (original.width * scale / aspectRatio) + 'px';
+            console.log(images[originalIndex], aspectRatio, clone.width, clone.height);
+        }
+    }
+
+    function prev() {
+        originalIndex -= 1;
+        original = images[originalIndex];
+        document.getElementById('fullscreen-img').src = original.src;
+        const imgRGB = getAverageRGBLeftRight(original);
+        overlay.style.background = `linear-gradient(to right, rgba(${imgRGB[0].r}, ${imgRGB[0].g}, ${imgRGB[0].b}), rgba(${imgRGB[1].r}, ${imgRGB[1].g}, ${imgRGB[1].b}))`;
+        const aspectRatio = original.naturalWidth / original.naturalHeight;
+        if (window.innerWidth <= 768) {
+            clone.style.width = '90vw';
+            clone.style.height = (0.90*window.innerWidth/aspectRatio) + 'px';
+        } else {
+            clone.style.maxWidth = 'none';
+            clone.style.width = (original.width * scale) + 'px';
+            clone.style.height = (original.width * scale / aspectRatio) + 'px';
+            console.log(images[originalIndex], aspectRatio, clone.width, clone.height);
+        }
+    }
+
+    //copy pasted generic swipe detection code
+    document.addEventListener('touchstart', handleTouchStart, false);        
+    document.addEventListener('touchmove', handleTouchMove, false);
+
+    var xDown = null;                                                        
+    var yDown = null;
+
+    function getTouches(evt) {
+    return evt.touches ||             // browser API
+            evt.originalEvent.touches; // jQuery
+    }                                                     
+                                                                            
+    function handleTouchStart(evt) {
+        const firstTouch = getTouches(evt)[0];                                      
+        xDown = firstTouch.clientX;                                      
+        yDown = firstTouch.clientY;                                      
+    };                                                
+                                                                            
+    function handleTouchMove(evt) {
+        if ( ! xDown || ! yDown ) {
+            return;
+        }
+
+        var xUp = evt.touches[0].clientX;                                    
+        var yUp = evt.touches[0].clientY;
+
+        var xDiff = xDown - xUp;
+        var yDiff = yDown - yUp;
+                                                                            
+        if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
+            if ( xDiff > 0 ) {
+                prev(); 
+            } else {
+                next();
+            }                       
+        } else {
+            if ( yDiff > 0 ) {
+                /* down swipe */ 
+            } else { 
+                /* up swipe */
+            }                                                                 
+        }
+        /* reset values */
+        xDown = null;
+        yDown = null;                                             
+    };
 })
 
 var activeBg = 1;
@@ -370,3 +421,4 @@ images.forEach(img => {
 if (loadedCount === images.length) {
     document.body.classList.remove('loading');
 }
+
