@@ -11,7 +11,7 @@ toggle.addEventListener('click', () => {
 
 /* Generate gallery */
 const gallerydiv = document.getElementById('gallery-container');
-const nums = Array.from({length: 176}, (v, k) => k + 1);
+const nums = Array.from({length: 280}, (v, k) => k + 1);
 fetch('js/image_categories.json')
     .then(response => response.json())
     .then(jsonData => {
@@ -185,7 +185,6 @@ document.addEventListener('click', function(e) {
         overlay.appendChild(prevButton);
     }
 
-
     function close() {
         document.body.style.overflow = 'auto';
         overlay.style.opacity = 0;
@@ -200,6 +199,7 @@ document.addEventListener('click', function(e) {
     }
 
     function next() {
+        if (originalIndex === images.length - 1) {return;}
         originalIndex += 1;
         original = images[originalIndex];
         document.getElementById('fullscreen-img').src = original.src;
@@ -213,11 +213,27 @@ document.addEventListener('click', function(e) {
             clone.style.maxWidth = 'none';
             clone.style.width = (original.width * scale) + 'px';
             clone.style.height = (original.width * scale / aspectRatio) + 'px';
-            console.log(images[originalIndex], aspectRatio, clone.width, clone.height);
+        }
+        if (images[originalIndex - 1] && originalIndex-1 === 0) {
+            const prevButton = document.createElement('div');
+            const prevIcon = document.createElement('img');
+            prevIcon.src = 'assets/leftArrow.png';
+            prevIcon.id = 'prev-icon';
+            prevButton.appendChild(prevIcon);
+            prevButton.id = 'prev-button';
+            prevButton.addEventListener('click', prev);
+            overlay.appendChild(prevButton);
+        }
+        if (originalIndex === images.length - 1) {
+            const nextButton = document.getElementById('next-button');
+            if (nextButton) {
+                nextButton.remove();
+            }
         }
     }
 
     function prev() {
+        if (originalIndex === 0) {return;}
         originalIndex -= 1;
         original = images[originalIndex];
         document.getElementById('fullscreen-img').src = original.src;
@@ -231,56 +247,71 @@ document.addEventListener('click', function(e) {
             clone.style.maxWidth = 'none';
             clone.style.width = (original.width * scale) + 'px';
             clone.style.height = (original.width * scale / aspectRatio) + 'px';
-            console.log(images[originalIndex], aspectRatio, clone.width, clone.height);
+        }
+        if (images[originalIndex + 1] && originalIndex+1 === images.length - 1) {
+            const nextButton = document.createElement('div');
+            const nextIcon = document.createElement('img');
+            nextIcon.src = 'assets/rightArrow.png';
+            nextIcon.id = 'next-icon';
+            nextButton.appendChild(nextIcon);
+            nextButton.id = 'next-button';
+            nextButton.addEventListener('click', next);
+            overlay.appendChild(nextButton);
+        }
+        if (originalIndex === 0) {
+            const prevButton = document.getElementById('prev-button');
+            if (prevButton) {
+                prevButton.remove();
+            }
         }
     }
 
     //copy pasted generic swipe detection code
-    document.addEventListener('touchstart', handleTouchStart, false);        
-    document.addEventListener('touchmove', handleTouchMove, false);
+//     document.addEventListener('touchstart', handleTouchStart, false);        
+//     document.addEventListener('touchmove', handleTouchMove, false);
 
-    var xDown = null;                                                        
-    var yDown = null;
+//     var xDown = null;                                                        
+//     var yDown = null;
 
-    function getTouches(evt) {
-    return evt.touches ||             // browser API
-            evt.originalEvent.touches; // jQuery
-    }                                                     
+//     function getTouches(evt) {
+//     return evt.touches ||             // browser API
+//             evt.originalEvent.touches; // jQuery
+//     }                                                     
                                                                             
-    function handleTouchStart(evt) {
-        const firstTouch = getTouches(evt)[0];                                      
-        xDown = firstTouch.clientX;                                      
-        yDown = firstTouch.clientY;                                      
-    };                                                
+//     function handleTouchStart(evt) {
+//         const firstTouch = getTouches(evt)[0];                                      
+//         xDown = firstTouch.clientX;                                      
+//         yDown = firstTouch.clientY;                                      
+//     };                                                
                                                                             
-    function handleTouchMove(evt) {
-        if ( ! xDown || ! yDown ) {
-            return;
-        }
+//     function handleTouchMove(evt) {
+//         if ( ! xDown || ! yDown ) {
+//             return;
+//         }
 
-        var xUp = evt.touches[0].clientX;                                    
-        var yUp = evt.touches[0].clientY;
+//         var xUp = evt.touches[0].clientX;                                    
+//         var yUp = evt.touches[0].clientY;
 
-        var xDiff = xDown - xUp;
-        var yDiff = yDown - yUp;
+//         var xDiff = xDown - xUp;
+//         var yDiff = yDown - yUp;
                                                                             
-        if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
-            if ( xDiff > 0 ) {
-                prev(); 
-            } else {
-                next();
-            }                       
-        } else {
-            if ( yDiff > 0 ) {
-                /* down swipe */ 
-            } else { 
-                /* up swipe */
-            }                                                                 
-        }
-        /* reset values */
-        xDown = null;
-        yDown = null;                                             
-    };
+//         if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
+//             if ( xDiff > 0 ) {
+//                 next(); 
+//             } else {
+//                 prev();
+//             }                       
+//         } else {
+//             if ( yDiff > 0 ) {
+//                 /* down swipe */ 
+//             } else { 
+//                 /* up swipe */
+//             }                                                                 
+//         }
+//         /* reset values */
+//         xDown = null;
+//         yDown = null;                                             
+//     };
 })
 
 var activeBg = 1;
@@ -289,7 +320,7 @@ function updateBackgroundColorFromVisibleImage() {
     const images = document.querySelectorAll('img.galleryimg:not([style*="display: none"])');
     for (let i = 0; i < images.length - 1; i++) {
         const rect = images[i].getBoundingClientRect();
-        if (window.innerWidth >= 768 ? (rect.top >= 0) : (rect.top >= window.innerHeight*0.15) && rect.bottom <= window.innerHeight) {
+        if (window.innerWidth >= 768 ? (rect.top >= 0) : (rect.top >= window.innerHeight*0.2 && rect.bottom <= window.innerHeight)) {
             if (lastImage === images[i]) {
                 break;
             }
@@ -311,7 +342,7 @@ function updateBackgroundColorFromVisibleImage() {
                 bg2.style.zIndex = -1;
                 bg1.style.zIndex = -2;
                 bg2.style.background = `linear-gradient(to right, rgb(${rgb1.r}, ${rgb1.g}, ${rgb1.b}), rgb(${rgb2.r}, ${rgb2.g}, ${rgb2.b})` + (rgb3 ? `, rgb(${rgb3.r}, ${rgb3.g}, ${rgb3.b})` : '') + ')';
-                bg2.style.transition = 'opacity .25s ease-in';
+                bg2.style.transition = 'opacity .1s ease-in';
                 bg2.style.opacity = 1;
 
                 activeBg = 0;
@@ -319,7 +350,7 @@ function updateBackgroundColorFromVisibleImage() {
                 bg1.style.zIndex = -1;
                 bg2.style.zIndex = -2;
                 bg1.style.background = `linear-gradient(to right, rgb(${rgb1.r}, ${rgb1.g}, ${rgb1.b}), rgb(${rgb2.r}, ${rgb2.g}, ${rgb2.b})` + (rgb3 ? `, rgb(${rgb3.r}, ${rgb3.g}, ${rgb3.b})` : '') + ')';
-                bg1.style.transition = 'opacity .25s ease-in';
+                bg1.style.transition = 'opacity .1s ease-in';
                 bg1.style.opacity = 1;
 
                 activeBg = 0;

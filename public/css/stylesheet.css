@@ -520,3 +520,22 @@ footer p {
     left: 20px;
     cursor: pointer;
 }
+
+@media (max-width: 768px) {
+    #next-icon {
+        width: 75px;
+        height: 75px;
+    }
+    #next-button {
+        top: auto;
+        bottom: 95px;
+    }
+    #prev-icon {
+        width: 75px;
+        height: 75px;
+    }
+    #prev-button {
+        top: auto;
+        bottom: 95px;
+    }
+}

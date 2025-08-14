@@ -11,12 +11,12 @@ with open("api.env", "r") as file:
 client = genai.Client(api_key=api_key)
 
 image_uris = []
-# Sort the files by number (1.jpg, 2.jpg, etc)
-# before going through them
+# Sort the files before going through them
 filenames = sorted([filename for filename in os.listdir("./") if filename.lower().endswith((".jpg", ".jpeg", ".png"))], key=lambda x: int(''.join(filter(str.isdigit, x))))
 
 for filename in filenames:
     filepath = filename
+    print(filepath)
     uploaded_file = client.files.upload(file=filepath)
 
     image_uris.append({
@@ -28,10 +28,11 @@ print(image_uris)
 
 prompt = (
     "Categorize each of the following images as exactly one of: "
-    "city, nature, portraits, or other."
+    "city, nature, portraits, macro, or other."
     "City: Any picture of a city, street, or building."
     "Nature: Any picture of nature, animals, or plants, including birds, squirrels, chipmunks, trees, or flowers. Portraits of animals count as nature."
     "Portraits: Any picture of a person. where the focus of the picture is on that person."
+    "Macro: Any picture of an object or a plant that is close up, where the background is blurred/irrelevant. Macro photography of nature counts as Macro."
     "Other: Any picture that does not fit the other categories.\n\n"
     "Return ONLY a JSON array of objects, in the form:\n"
     "[ {\"filename\": \"filename.jpg\", \"category\": \"city\"}, ... ]"
