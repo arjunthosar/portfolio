@@ -11,14 +11,19 @@ toggle.addEventListener('click', () => {
 
 /* Generate gallery */
 const gallerydiv = document.getElementById('gallery-container');
-const nums = Array.from({length: 280}, (v, k) => k + 1);
+const AMOUNT_OF_IMAGES = 280;
+const nums = Array.from({length: AMOUNT_OF_IMAGES}, (v, k) => k + 1);
+let originalOrder = [];
+const excludedNums = [234, 232, 231]
+let data;
 fetch('js/image_categories.json')
     .then(response => response.json())
     .then(jsonData => {
-        const data = jsonData;
+        data = jsonData;
 
         while (nums.length > 0) {
             const i = nums.splice(Math.floor(Math.random() * nums.length), 1)[0];
+            if (excludedNums.includes(i)) continue;
             const image = document.createElement('img');
             image.src = 'assets/gallery/' + i + '.jpg';
             const filename = i + '.jpg';
@@ -27,6 +32,8 @@ fetch('js/image_categories.json')
                 image.dataset.category = matched.category;
             }
             image.className = 'galleryimg';
+            image.id = i;
+            originalOrder.push(i);
             gallerydiv.appendChild(image);
         }
     })
@@ -37,32 +44,33 @@ function getAverageRGB(imgEl) {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
 
-    const width = canvas.width = imgEl.naturalWidth || imgEl.width;
-    const height = canvas.height = imgEl.naturalHeight || imgEl.height;
+    const targetSize = 20; // much smaller than full size
+    canvas.width = targetSize;
+    canvas.height = targetSize;
 
-    context.drawImage(imgEl, 0, 0, width, height);
+    // Draw scaled down image
+    context.drawImage(imgEl, 0, 0, targetSize, targetSize);
+
     let data;
     try {
-        data = context.getImageData(0, 0, width, height);
-    } catch (e) {
+        data = context.getImageData(0, 0, targetSize, targetSize).data;
+    } catch {
         return { r: 0, g: 0, b: 0 };
     }
 
-    const pixels = data.data;
-    let r = 0, g = 0, b = 0, count = 0;
+    let r = 0, g = 0, b = 0;
+    const totalPixels = targetSize * targetSize;
 
-    const step = 5 * 4;
-    for (let i = 0; i < pixels.length; i += step) {
-        r += pixels[i];
-        g += pixels[i + 1];
-        b += pixels[i + 2];
-        count++;
+    for (let i = 0; i < data.length; i += 4) {
+        r += data[i];
+        g += data[i + 1];
+        b += data[i + 2];
     }
 
     return {
-        r: Math.round(r / count),
-        g: Math.round(g / count),
-        b: Math.round(b / count)
+        r: Math.round(r / totalPixels),
+        g: Math.round(g / totalPixels),
+        b: Math.round(b / totalPixels)
     };
 }
 
@@ -70,45 +78,42 @@ function getAverageRGBLeftRight(imgEl) {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
 
-    const width = canvas.width = imgEl.naturalWidth || imgEl.width;
-    const height = canvas.height = imgEl.naturalHeight || imgEl.height;
+    const targetSize = 20;
+    canvas.width = targetSize;
+    canvas.height = targetSize;
+    context.drawImage(imgEl, 0, 0, targetSize, targetSize);
 
-    context.drawImage(imgEl, 0, 0, width, height);
     let data;
     try {
-        data = context.getImageData(0, 0, width, height);
-    } catch (e) {
+        data = context.getImageData(0, 0, targetSize, targetSize).data;
+    } catch {
         return [{ r: 0, g: 0, b: 0 }, { r: 0, g: 0, b: 0 }];
     }
 
-    const pixels = data.data;
     let r1 = 0, g1 = 0, b1 = 0, count1 = 0;
     let r2 = 0, g2 = 0, b2 = 0, count2 = 0;
 
-    const step = 5 * 4;
-    for (let i = 0; i < pixels.length; i += step) {
-        if (i < pixels.length / 2) {
-            r1 += pixels[i];
-            g1 += pixels[i + 1];
-            b1 += pixels[i + 2];
-            count1++;
-        } else {
-            r2 += pixels[i];
-            g2 += pixels[i + 1];
-            b2 += pixels[i + 2];
-            count2++;
+    for (let y = 0; y < targetSize; y++) {
+        for (let x = 0; x < targetSize; x++) {
+            const idx = (y * targetSize + x) * 4;
+            if (x < targetSize / 2) {
+                r1 += data[idx];
+                g1 += data[idx + 1];
+                b1 += data[idx + 2];
+                count1++;
+            } else {
+                r2 += data[idx];
+                g2 += data[idx + 1];
+                b2 += data[idx + 2];
+                count2++;
+            }
         }
     }
 
-    return [{
-        r: Math.round(r1 / count1),
-        g: Math.round(g1 / count1),
-        b: Math.round(b1 / count1)
-    }, {
-        r: Math.round(r2 / count2),
-        g: Math.round(g2 / count2),
-        b: Math.round(b2 / count2)
-    }];
+    return [
+        { r: Math.round(r1 / count1), g: Math.round(g1 / count1), b: Math.round(b1 / count1) },
+        { r: Math.round(r2 / count2), g: Math.round(g2 / count2), b: Math.round(b2 / count2) }
+    ];
 }
 
 document.addEventListener('click', function(e) {
@@ -163,7 +168,6 @@ document.addEventListener('click', function(e) {
 
     const images = document.querySelectorAll('img.galleryimg:not([style*="display: none"])');
     var originalIndex = Array.from(images).indexOf(original);
-    console.log(originalIndex);
     if (images[originalIndex + 1]) {
         const nextButton = document.createElement('div');
         const nextIcon = document.createElement('img');
@@ -265,53 +269,6 @@ document.addEventListener('click', function(e) {
             }
         }
     }
-
-    //copy pasted generic swipe detection code
-//     document.addEventListener('touchstart', handleTouchStart, false);        
-//     document.addEventListener('touchmove', handleTouchMove, false);
-
-//     var xDown = null;                                                        
-//     var yDown = null;
-
-//     function getTouches(evt) {
-//     return evt.touches ||             // browser API
-//             evt.originalEvent.touches; // jQuery
-//     }                                                     
-                                                                            
-//     function handleTouchStart(evt) {
-//         const firstTouch = getTouches(evt)[0];                                      
-//         xDown = firstTouch.clientX;                                      
-//         yDown = firstTouch.clientY;                                      
-//     };                                                
-                                                                            
-//     function handleTouchMove(evt) {
-//         if ( ! xDown || ! yDown ) {
-//             return;
-//         }
-
-//         var xUp = evt.touches[0].clientX;                                    
-//         var yUp = evt.touches[0].clientY;
-
-//         var xDiff = xDown - xUp;
-//         var yDiff = yDown - yUp;
-                                                                            
-//         if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
-//             if ( xDiff > 0 ) {
-//                 next(); 
-//             } else {
-//                 prev();
-//             }                       
-//         } else {
-//             if ( yDiff > 0 ) {
-//                 /* down swipe */ 
-//             } else { 
-//                 /* up swipe */
-//             }                                                                 
-//         }
-//         /* reset values */
-//         xDown = null;
-//         yDown = null;                                             
-//     };
 })
 
 var activeBg = 1;
@@ -332,7 +289,7 @@ function updateBackgroundColorFromVisibleImage() {
             } else {
                 rgb1 = getAverageRGB(images[i]);
                 rgb2 = getAverageRGB(images[i + 1]);
-                if (images[i].width + images[i+1].width + images[i+2].width <= window.innerWidth * 0.74) {
+                if (images[i].width + images[i+1].width + images[i+2].width <= window.innerWidth * 0.8) {
                     rgb3 = getAverageRGB(images[i + 2]);
                 }
             }
@@ -342,7 +299,7 @@ function updateBackgroundColorFromVisibleImage() {
                 bg2.style.zIndex = -1;
                 bg1.style.zIndex = -2;
                 bg2.style.background = `linear-gradient(to right, rgb(${rgb1.r}, ${rgb1.g}, ${rgb1.b}), rgb(${rgb2.r}, ${rgb2.g}, ${rgb2.b})` + (rgb3 ? `, rgb(${rgb3.r}, ${rgb3.g}, ${rgb3.b})` : '') + ')';
-                bg2.style.transition = 'opacity .1s ease-in';
+                bg2.style.transition = 'opacity .2s ease-in';
                 bg2.style.opacity = 1;
 
                 activeBg = 0;
@@ -350,7 +307,7 @@ function updateBackgroundColorFromVisibleImage() {
                 bg1.style.zIndex = -1;
                 bg2.style.zIndex = -2;
                 bg1.style.background = `linear-gradient(to right, rgb(${rgb1.r}, ${rgb1.g}, ${rgb1.b}), rgb(${rgb2.r}, ${rgb2.g}, ${rgb2.b})` + (rgb3 ? `, rgb(${rgb3.r}, ${rgb3.g}, ${rgb3.b})` : '') + ')';
-                bg1.style.transition = 'opacity .1s ease-in';
+                bg1.style.transition = 'opacity .2s ease-in';
                 bg1.style.opacity = 1;
 
                 activeBg = 0;
@@ -379,11 +336,13 @@ let lastTime = Date.now();
 // Run on scroll and on load
 window.addEventListener('scroll', updateBackgroundColorFromVisibleImage);
 window.addEventListener('load', updateBackgroundColorFromVisibleImage);
-const checkboxes = ['#random', '#nature', '#portraits', '#macro', '#city', '#other'];
+const checkboxes = ['#nature', '#portraits', '#macro', '#city', '#other'];
 
 checkboxes.forEach(id => {
     document.querySelector(id).addEventListener('change', filterImages);
 })
+
+document.querySelector('#recent').addEventListener('change', sortImages);
 
 function filterImages() {
     const images = document.querySelectorAll('img.galleryimg');
@@ -392,7 +351,7 @@ function filterImages() {
         .map(checkbox => checkbox.replace('#', ''));
     images.forEach(img => {
         const imgCategory = img.dataset.category;
-        if (checkedCategories.includes('random') || checkedCategories.includes(imgCategory)) {
+        if (checkedCategories.includes(imgCategory)) {
             img.style.display = '';
         } else {
             img.style.display = 'none';
@@ -400,26 +359,49 @@ function filterImages() {
     });
 }
 
-document.querySelector('#random').addEventListener('change', function() {
-    if (this.checked) {
-        checkboxes.forEach(id => {
-            if (id !== '#random') {
-                document.querySelector(id).checked = true;
+function sortImages() {
+    const checked = document.querySelector('#recent').checked;
+    if (checked) {
+        while (gallerydiv.firstChild) {
+            gallerydiv.removeChild(gallerydiv.firstChild);
+        }
+        for (i = AMOUNT_OF_IMAGES; i > 0; i--) {
+            if (excludedNums.includes(i)) continue;
+            const image = document.createElement('img');
+            image.src = 'assets/gallery/' + i + '.jpg';
+            const filename = i + '.jpg';
+            const matched = data.find(item => item.filename === filename);
+            if (matched) {
+                image.dataset.category = matched.category;
             }
-        });
+            image.className = 'galleryimg';
+            image.id = i;
+            gallerydiv.appendChild(image);
+        }
+    } else {
+        const nums = [...originalOrder]; 
+        while (gallerydiv.firstChild) {
+            gallerydiv.removeChild(gallerydiv.firstChild);
+        }
+        while (nums.length > 0) {
+            nums.forEach(i => {
+                if (excludedNums.includes(i)) return;
+                const image = document.createElement('img');
+                image.src = 'assets/gallery/' + i + '.jpg';
+                const filename = i + '.jpg';
+                const matched = data.find(item => item.filename === filename);
+                if (matched) {
+                    image.dataset.category = matched.category;
+                }
+                image.className = 'galleryimg';
+                image.id = i;
+                gallerydiv.appendChild(image);
+                nums.splice(nums.indexOf(i), 1);
+            });
+        }
+        filterImages();
     }
-});
-
-checkboxes.forEach(id => {
-    if (id !== '#random') {
-        document.querySelector(id).addEventListener('change', function() {
-            if (!this.checked) {
-                document.querySelector('#random').checked = false;
-            }
-        });
-    }
-});
-
+}
 
 
 let loadedCount = 0;
