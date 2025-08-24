@@ -23,7 +23,7 @@ const observer = new IntersectionObserver((entries) => {
     threshold: 0.2 // Trigger when 20% visible
 });
 
-document.querySelectorAll('.about-image-container-left, .about-image-container-right').forEach(el => {
+document.querySelectorAll('.about-image-left, .about-image-right, .about-text-left, .about-text-right, .about-text-container').forEach(el => {
     observer.observe(el);
 });
 
