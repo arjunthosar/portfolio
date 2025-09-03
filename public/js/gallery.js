@@ -378,6 +378,7 @@ function sortImages() {
             image.id = i;
             gallerydiv.appendChild(image);
         }
+        filterImages();
     } else {
         const nums = [...originalOrder]; 
         while (gallerydiv.firstChild) {
