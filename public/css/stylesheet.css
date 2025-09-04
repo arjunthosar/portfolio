@@ -41,6 +41,7 @@ header {
     width: 100vw;
     height: 10vh;
     border-radius: 0 0 16px 16px;
+    z-index: 1000;
 }
 
 
@@ -82,46 +83,10 @@ nav a {
     cursor: pointer;
 }
 
-/* Media query for screen width less than 768px */
-@media (max-width: 768px) {
-    /* Hide nav by default */
-    nav {
-    display: none;
-    /* Make nav display as flex box */
-    flex-direction: column;
-    /* Make nav background color dark */
-    background-color: rgba(0, 0, 0, 0.7);
-    /* Make nav position absolute */
-    position: absolute;
-    /* Make nav top position 60px */
-    top: 60px;
-    /* Make nav right position 0 */
-    right: 0;
-    /* Make nav width 200px */
-    width: 200px;
-    /* Add padding to nav */
-    padding: 1rem;
-    border-radius: 35px;
-    /* On top of everything */
-    z-index: 3;
-    }
-
-    /* Make nav active */
-    nav.active {
-    /* Make nav display as flex box */
-    display: flex;
-    }
-
-    /* Make menu toggle visible */
-    .menu-toggle {
-    /* Make menu toggle display as block */
-    display: block;
-    }
-}
 
 .slider {
     width: 100%;
-    height: 100%;
+    height: 90vh;
     overflow: hidden;
     position: absolute;
     z-index: 0;
@@ -131,7 +96,7 @@ nav a {
     display: flex;
     align-items: center;      /* Vertically center content */
     justify-content: center;  /* Horizontally center content */
-    height: 100vh;            /* Or whatever height you want */
+    height: 90vh;            /* Or whatever height you want */
     position: relative;
     overflow: visible;
 }
@@ -167,7 +132,7 @@ nav a {
 }
 
 .banner {
-    height: 100vh;
+    height: 90vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -183,7 +148,7 @@ nav a {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.2);
     z-index: 1;
 }
 
@@ -200,6 +165,47 @@ nav a {
 
 .banner p {
     font-size: 2rem;
+}
+
+/* Media query for screen width less than 768px */
+@media (max-width: 768px) {
+    /* Hide nav by default */
+    nav {
+    display: none;
+    /* Make nav display as flex box */
+    flex-direction: column;
+    /* Make nav background color dark */
+    background-color: rgba(0, 0, 0, 0.7);
+    /* Make nav position absolute */
+    position: absolute;
+    /* Make nav top position 60px */
+    top: 60px;
+    /* Make nav right position 0 */
+    right: 0;
+    /* Make nav width 200px */
+    width: 200px;
+    /* Add padding to nav */
+    padding: 1rem;
+    border-radius: 35px;
+    /* On top of everything */
+    }
+
+    /* Make nav active */
+    nav.active {
+    /* Make nav display as flex box */
+    display: flex;
+    z-index: 1000;
+    }
+
+    /* Make menu toggle visible */
+    .menu-toggle {
+    /* Make menu toggle display as block */
+    display: block;
+    }
+
+    .home-container .slide img {
+        height: 50vh;
+    }
 }
 
 
@@ -527,7 +533,7 @@ footer p {
 
 #next-button {
     position: absolute;
-    top: calc(50vh - 75px);
+    top: calc(50vh - 80px);
     right: 20px;
     cursor: pointer;
 }
@@ -541,7 +547,7 @@ footer p {
 
 #prev-button {
     position: absolute;
-    top: calc(50vh - 75px);
+    top: calc(50vh - 80px);
     left: 20px;
     cursor: pointer;
 }
@@ -563,6 +569,24 @@ footer p {
         top: auto;
         bottom: 95px;
     }
+}
+
+#gallery-title {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+#gallery-desc {
+    color: white;
+    font-size: 20px;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    padding: 10px 0;
 }
 
 /* Contact page */

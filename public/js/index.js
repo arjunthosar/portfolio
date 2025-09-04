@@ -38,6 +38,6 @@ if (loadedCount === images.length) {
 
 function startAnimation() {
     const track = document.querySelector('.slide-track');
-    track.style.animation = 'scroll 30s linear infinite';
+    track.style.animation = 'scroll 60s linear infinite';
 }
 });

@@ -1,3 +1,14 @@
+/* Get menu toggle element */
+const toggle = document.getElementById('toggle');
+/* Get nav element */
+const nav = document.getElementById('nav');
+
+/* Add event listener to menu toggle */
+toggle.addEventListener('click', () => {
+    /* Toggle active class on nav */
+    nav.classList.toggle('active');
+});
+
 let data;
 const row1 = document.getElementById('row1');
 const row2 = document.getElementById('row2');
