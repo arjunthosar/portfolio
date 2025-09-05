@@ -20,29 +20,43 @@
         </nav>
     </header>
 
+    <div id="gallery-title">
+        <h1>Gallery</h1>
+    </div>
+
+    <div id="gallery-desc">
+        <p>Click on an image to zoom in on it. The background changes color based on the picture you are viewing!</p>
+    </div>
+
     <div id="filters-container">
         <label class="checkboxAndIcon">
+            <p class="checkboxText" id="recentText">Recent</p>
             <img src="assets/recentIcon.png" alt="Recent Icon" class="checkboxIcon">
             <input type="checkbox" id="recent" name="recent">
         </label>
         <div style="border-left: 2px solid white; height: 30px;"></div>        
         <label class="checkboxAndIcon">
+            <p class="checkboxText" id="natureText">Nature</p>
             <img src="assets/natureIcon.png" alt="Nature Icon" class="checkboxIcon">
             <input type="checkbox" id="nature" name="nature" checked>
         </label>
         <label class="checkboxAndIcon">
+            <p class="checkboxText" id="portraitsText">Portraits</p>
             <img src="assets\portraitsIcon.png" alt="Portraits Icon" class="checkboxIcon">
             <input type="checkbox" id="portraits" name="portraits" checked>
         </label>
         <label class="checkboxAndIcon">
+            <p class="checkboxText" id="cityText">City</p>
             <img src="assets/cityIcon.png" alt="City Icon" class="checkboxIcon">
             <input type="checkbox" id="city" name="city" checked>
         </label>
         <label class="checkboxAndIcon">
+            <p class="checkboxText" id="macroText">Macros</p>
             <img src="assets/macroIcon.png" alt="Macro Icon" class="checkboxIcon">
             <input type="checkbox" id="macro" name="macro" checked>
         </label>
-        <label class="checkboxAndIcon">
+        <label class="checkboxAndIcon" id="otherLabel">
+            <p class="checkboxText" id="otherText">Other</p>
             <img src="assets/otherIcon.png" alt="Other Icon" class="checkboxIcon">
             <input type="checkbox" id="other" name="other" checked>
         </label>

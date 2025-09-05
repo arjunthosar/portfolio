@@ -26,6 +26,7 @@ fetch('js/image_categories.json')
             if (excludedNums.includes(i)) continue;
             const image = document.createElement('img');
             image.src = 'assets/gallery/' + i + '.jpg';
+            image.loading = 'lazy';
             const filename = i + '.jpg';
             const matched = data.find(item => item.filename === filename);
             if (matched) {
@@ -277,7 +278,7 @@ function updateBackgroundColorFromVisibleImage() {
     const images = document.querySelectorAll('img.galleryimg:not([style*="display: none"])');
     for (let i = 0; i < images.length - 1; i++) {
         const rect = images[i].getBoundingClientRect();
-        if (window.innerWidth >= 768 ? (rect.top >= 0) : (rect.top >= window.innerHeight*0.2 && rect.bottom <= window.innerHeight)) {
+        if (window.innerWidth >= 768 ? (rect.top >= 0) : (rect.bottom >= window.innerHeight*0.4 && rect.bottom <= window.innerHeight)) {
             if (lastImage === images[i]) {
                 break;
             }
@@ -339,10 +340,32 @@ window.addEventListener('load', updateBackgroundColorFromVisibleImage);
 const checkboxes = ['#nature', '#portraits', '#macro', '#city', '#other'];
 
 checkboxes.forEach(id => {
-    document.querySelector(id).addEventListener('change', filterImages);
+    document.querySelector(id).addEventListener('change', checkboxTriggered);
 })
 
-document.querySelector('#recent').addEventListener('change', sortImages);
+document.querySelector('#recent').addEventListener('change', checkboxTriggered);
+
+function checkboxTriggered(event) {
+    const checkbox = document.getElementById(event.target.name + 'Text');
+    const checked = event.target.checked;
+
+    if (event.target.name === "recent") {
+        sortImages();
+    } else {
+        filterImages();
+    }
+
+    if (checked) {
+        checkbox.style.opacity = '0';
+        checkbox.style.transform = 'translateY(-100%)';
+        checkbox.style.transition = 'opacity .2s ease-in, transform .2s ease-in';
+        checkbox.style.opacity = '1';
+        checkbox.style.transform = 'translateY(0)';
+    } else {
+        checkbox.style.opacity = '0';
+        checkbox.style.transform = 'translateY(100%)';
+    }
+}
 
 function filterImages() {
     const images = document.querySelectorAll('img.galleryimg');
