@@ -371,6 +371,14 @@ nav a {
             transform: translateX(0vw);
         }
     }
+    
+    .about-text-left, .about-text-right {
+        font-size: 1.5rem;
+    }
+
+    .about-title-left, .about-title-right {
+        font-size: 2.5rem;
+    }
 }
 
 
