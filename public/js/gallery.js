@@ -11,7 +11,7 @@ toggle.addEventListener('click', () => {
 
 /* Generate gallery */
 const gallerydiv = document.getElementById('gallery-container');
-const AMOUNT_OF_IMAGES = 280;
+const AMOUNT_OF_IMAGES = 297;
 const nums = Array.from({length: AMOUNT_OF_IMAGES}, (v, k) => k + 1);
 let originalOrder = [];
 const excludedNums = [234, 232, 231]
@@ -159,9 +159,9 @@ document.addEventListener('click', function(e) {
     clone.style.transition = 'left, right, opacity .25s ease-out';
 
     const closeButton = document.createElement('div');
-    const closeIcon = document.createElement('img');
-    closeIcon.src = 'assets/closeIcon.png';
+    const closeIcon = document.createElement('span');
     closeIcon.id = 'close-icon';
+    closeIcon.innerHTML = "&#10005";
     closeButton.appendChild(closeIcon);
     closeButton.id = 'close-button';
     closeButton.addEventListener('click', close);

@@ -49,7 +49,7 @@ fetch('js/image_categories.json')
             }
         }
         row1.style.animation = window.innerWidth >= 768 ? 'scrollUp 60s linear infinite' : 'scrollUp 80s linear infinite'
-        window.innerWidth >= 768 ? row2.style.animation = 'scrollDown 75s linear infinite' : null
+        window.innerWidth >= 768 ? row2.style.animation = 'scrollDown 60s linear infinite' : null
 
     })
     .catch(error => console.error('Error loading JSON:', error));

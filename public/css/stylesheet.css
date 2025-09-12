@@ -31,7 +31,7 @@ header {
     /* Make text color white */
     color: white;
     /* Add padding to header */
-    padding: 1rem 2rem;
+    padding: 16px 32px;
     /* Make header display as flex box */
     display: flex;
     /* Make header content justify to space-between */
@@ -49,7 +49,6 @@ header {
 .logo {
     /* Make logo font bold and font size 1.5rem */
     font-weight: bold;
-    font-size: 1.5rem;
 }
 
 .logo a {
@@ -57,7 +56,7 @@ header {
     color: white;
     /* Remove underline from link */
     text-decoration: none;
-    font-size: 3rem;
+    font-size: 48px;
 }
 
 /* Style links in nav */
@@ -67,9 +66,8 @@ nav a {
     /* Remove underline from links */
     text-decoration: none;
     /* Add margin to links */
-    margin-left: 1.5rem;
-    /* Make link font size 1rem */
-    font-size: 2rem;
+    margin-left: 24px;
+    font-size: 32px;
     font-family: 'Zain';
 }
 
@@ -78,11 +76,12 @@ nav a {
     /* Hide menu toggle by default */
     display: none;
     /* Make menu toggle font size 1.5rem */
-    font-size: 1.5rem;
+    font-size: 24px;
     /* Make menu toggle cursor a pointer */
     cursor: pointer;
 }
 
+/* Home page*/
 
 .slider {
     width: 100%;
@@ -155,16 +154,16 @@ nav a {
 .banner-content {
     position: relative;
     z-index: 2;
-    padding: 0 1rem;
+    padding: 0 16px;
 }
 
 .banner h1 {
-    font-size: 4rem;
-    margin-bottom: 1rem;
+    font-size: 64px;
+    margin-bottom: 16px;
 }
 
 .banner p {
-    font-size: 2rem;
+    font-size: 32px;
 }
 
 /* Media query for screen width less than 768px */
@@ -185,7 +184,7 @@ nav a {
     /* Make nav width 200px */
     width: 200px;
     /* Add padding to nav */
-    padding: 1rem;
+    padding: 16px;
     border-radius: 35px;
     /* On top of everything */
     }
@@ -265,7 +264,7 @@ nav a {
     opacity: 0;
     width: 45%;
     border-radius: 16px;
-    padding: 2rem;
+    padding: 32px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -275,7 +274,7 @@ nav a {
 .about-text-left, .about-text-right {
     text-align: center;
     margin: 0 auto;
-    font-size: 2.5rem;
+    font-size: 40px;
     opacity: 0;
     color: #fff;
     z-index: 6;
@@ -284,7 +283,7 @@ nav a {
 
 .about-title-left, .about-title-right {
     margin: 0 auto;
-    font-size: 4rem;
+    font-size: 64px;
     opacity: 0;
     color: #fff;
     z-index: 6;
@@ -373,11 +372,11 @@ nav a {
     }
     
     .about-text-left, .about-text-right {
-        font-size: 1.5rem;
+        font-size: 24px;
     }
 
     .about-title-left, .about-title-right {
-        font-size: 2.5rem;
+        font-size: 40px;
     }
 }
 
@@ -530,10 +529,11 @@ footer p {
 }
 
 #close-icon {
-    width: 50px;
-    height: 50px;
-    filter: invert(1);
+    position: relative;
+    font-size: 50px;
+    color: white;
     opacity: 0.5;
+    left:2vw;
 }
 
 #close-button {
@@ -580,7 +580,7 @@ footer p {
     }
     #next-button {
         top: auto;
-        bottom: 95px;
+        bottom: 7vh;
     }
     #prev-icon {
         width: 75px;
@@ -588,7 +588,7 @@ footer p {
     }
     #prev-button {
         top: auto;
-        bottom: 95px;
+        bottom: 7vh;
     }
 }
 
