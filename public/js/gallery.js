@@ -11,32 +11,58 @@ toggle.addEventListener('click', () => {
 
 /* Generate gallery */
 const gallerydiv = document.getElementById('gallery-container');
-const AMOUNT_OF_IMAGES = 297;
+const AMOUNT_OF_IMAGES = 269;
 const nums = Array.from({length: AMOUNT_OF_IMAGES}, (v, k) => k + 1);
 let originalOrder = [];
-const excludedNums = [234, 232, 231]
+const excludedNums = [];
 let data;
+
 fetch('js/image_categories.json')
     .then(response => response.json())
     .then(jsonData => {
         data = jsonData;
 
+        // Randomly generate images and add them to the gallery
         while (nums.length > 0) {
             const i = nums.splice(Math.floor(Math.random() * nums.length), 1)[0];
             if (excludedNums.includes(i)) continue;
+
+            const imageDiv = document.createElement('div');
+            imageDiv.className = 'loadingGalleryImg';
+            imageDiv.id = i;
+
             const image = document.createElement('img');
-            image.src = 'assets/gallery/' + i + '.jpg';
-            image.loading = 'lazy';
-            const filename = i + '.jpg';
+            src = `assets/gallery/${window.innerWidth < 768 ? `${i}m.jpg` : `${i}.jpg`}`
+            image.setAttribute('data-src', src);
+            image.className = 'galleryImg';
+            const filename = `${i}.jpg`;
             const matched = data.find(item => item.filename === filename);
             if (matched) {
                 image.dataset.category = matched.category;
             }
-            image.className = 'galleryimg';
             image.id = i;
+            imageDiv.style.aspectRatio = matched.width/matched.height;
+            image.oncontextmenu = function() { return false; };
+
+            // Add loading image
+            const loadingImage = document.createElement('img');
+            loadingImage.src = 'assets/loading.gif';
+            loadingImage.className = 'loadingGif';
+
+            // Add image to the gallery
+            image.onload = function() {
+                this.parentNode.className = 'loadedGalleryImg';
+                this.parentNode.removeChild(this.parentNode.firstChild);
+            };
             originalOrder.push(i);
-            gallerydiv.appendChild(image);
+
+            imageDiv.appendChild(loadingImage);
+            imageDiv.appendChild(image);
+            gallerydiv.appendChild(imageDiv);
         }
+
+        // Unveil the images
+        $("img").unveil(window.innerWidth < 768 ? 1000 : 500);
     })
     .catch(error => console.error('Error loading JSON:', error));
 
@@ -118,7 +144,7 @@ function getAverageRGBLeftRight(imgEl) {
 }
 
 document.addEventListener('click', function(e) {
-    if (!e.target.classList.contains('galleryimg')) return;
+    if (!e.target.classList.contains('galleryImg')) return;
     document.body.style.overflowY = 'hidden';
     var original = e.target;
     const rect = original.getBoundingClientRect();
@@ -167,9 +193,11 @@ document.addEventListener('click', function(e) {
     closeButton.addEventListener('click', close);
     overlay.appendChild(closeButton);
 
-    const images = document.querySelectorAll('img.galleryimg:not([style*="display: none"])');
-    var originalIndex = Array.from(images).indexOf(original);
-    if (images[originalIndex + 1]) {
+    const imageDivs = document.querySelectorAll('.loadedGalleryImg:not([style*="display: none"])'); //TODO
+    console.log(imageDivs);
+    var originalIndex = Array.from(imageDivs).indexOf(original.parentNode);
+    console.log(originalIndex);
+    if (imageDivs[originalIndex + 1]) {
         const nextButton = document.createElement('div');
         const nextIcon = document.createElement('img');
         nextIcon.src = 'assets/rightArrow.png';
@@ -179,7 +207,7 @@ document.addEventListener('click', function(e) {
         nextButton.addEventListener('click', next);
         overlay.appendChild(nextButton);
     }
-    if (images[originalIndex - 1]) {
+    if (imageDivs[originalIndex - 1]) {
         const prevButton = document.createElement('div');
         const prevIcon = document.createElement('img');
         prevIcon.src = 'assets/leftArrow.png';
@@ -204,13 +232,13 @@ document.addEventListener('click', function(e) {
     }
 
     function next() {
-        if (originalIndex === images.length - 1) {return;}
+        if (originalIndex === imageDivs.length - 1) {return;}
         originalIndex += 1;
-        original = images[originalIndex];
-        document.getElementById('fullscreen-img').src = original.src;
-        const imgRGB = getAverageRGBLeftRight(original);
+        original = imageDivs[originalIndex];
+        document.getElementById('fullscreen-img').src = original.querySelector('img').src;
+        const imgRGB = getAverageRGBLeftRight(original.querySelector('img'));
         overlay.style.background = `linear-gradient(to right, rgba(${imgRGB[0].r}, ${imgRGB[0].g}, ${imgRGB[0].b}), rgba(${imgRGB[1].r}, ${imgRGB[1].g}, ${imgRGB[1].b}))`;
-        const aspectRatio = original.naturalWidth / original.naturalHeight;
+        const aspectRatio = original.querySelector('img').naturalWidth / original.querySelector('img').naturalHeight;
         if (window.innerWidth <= 768) {
             clone.style.width = '90vw';
             clone.style.height = (0.90*window.innerWidth/aspectRatio) + 'px';
@@ -219,7 +247,7 @@ document.addEventListener('click', function(e) {
             clone.style.width = (original.width * scale) + 'px';
             clone.style.height = (original.width * scale / aspectRatio) + 'px';
         }
-        if (images[originalIndex - 1] && originalIndex-1 === 0) {
+        if (imageDivs[originalIndex - 1] && originalIndex-1 === 0) {
             const prevButton = document.createElement('div');
             const prevIcon = document.createElement('img');
             prevIcon.src = 'assets/leftArrow.png';
@@ -229,7 +257,7 @@ document.addEventListener('click', function(e) {
             prevButton.addEventListener('click', prev);
             overlay.appendChild(prevButton);
         }
-        if (originalIndex === images.length - 1) {
+        if (originalIndex === imageDivs.length - 1) {
             const nextButton = document.getElementById('next-button');
             if (nextButton) {
                 nextButton.remove();
@@ -240,11 +268,11 @@ document.addEventListener('click', function(e) {
     function prev() {
         if (originalIndex === 0) {return;}
         originalIndex -= 1;
-        original = images[originalIndex];
-        document.getElementById('fullscreen-img').src = original.src;
-        const imgRGB = getAverageRGBLeftRight(original);
+        original = imageDivs[originalIndex];
+        document.getElementById('fullscreen-img').src = original.querySelector('img').src;
+        const imgRGB = getAverageRGBLeftRight(original.querySelector('img'));
         overlay.style.background = `linear-gradient(to right, rgba(${imgRGB[0].r}, ${imgRGB[0].g}, ${imgRGB[0].b}), rgba(${imgRGB[1].r}, ${imgRGB[1].g}, ${imgRGB[1].b}))`;
-        const aspectRatio = original.naturalWidth / original.naturalHeight;
+        const aspectRatio = original.querySelector('img').naturalWidth / original.querySelector('img').naturalHeight;
         if (window.innerWidth <= 768) {
             clone.style.width = '90vw';
             clone.style.height = (0.90*window.innerWidth/aspectRatio) + 'px';
@@ -253,7 +281,7 @@ document.addEventListener('click', function(e) {
             clone.style.width = (original.width * scale) + 'px';
             clone.style.height = (original.width * scale / aspectRatio) + 'px';
         }
-        if (images[originalIndex + 1] && originalIndex+1 === images.length - 1) {
+        if (imageDivs[originalIndex + 1] && originalIndex+1 === imageDivs.length - 1) {
             const nextButton = document.createElement('div');
             const nextIcon = document.createElement('img');
             nextIcon.src = 'assets/rightArrow.png';
@@ -275,23 +303,23 @@ document.addEventListener('click', function(e) {
 var activeBg = 1;
 var lastImage;
 function updateBackgroundColorFromVisibleImage() {
-    const images = document.querySelectorAll('img.galleryimg:not([style*="display: none"])');
-    for (let i = 0; i < images.length - 1; i++) {
-        const rect = images[i].getBoundingClientRect();
+    const imageDivs = document.querySelectorAll('.loadedGalleryImg:not([style*="display: none"])');
+    for (let i = 0; i < imageDivs.length - 1; i++) {
+        const rect = imageDivs[i].getBoundingClientRect();
         if (window.innerWidth >= 768 ? (rect.top >= 0) : (rect.bottom >= window.innerHeight*0.4 && rect.bottom <= window.innerHeight)) {
-            if (lastImage === images[i]) {
+            if (lastImage === imageDivs[i]) {
                 break;
             }
             var rgb1, rgb2, rgb3;
             if (window.innerWidth < 768) {
-                const rgbLR = getAverageRGBLeftRight(images[i]);
+                const rgbLR = getAverageRGBLeftRight(imageDivs[i].querySelector('img'));
                 rgb1 = rgbLR[0];
                 rgb2 = rgbLR[1];
             } else {
-                rgb1 = getAverageRGB(images[i]);
-                rgb2 = getAverageRGB(images[i + 1]);
-                if (images[i].width + images[i+1].width + images[i+2].width <= window.innerWidth * 0.8) {
-                    rgb3 = getAverageRGB(images[i + 2]);
+                rgb1 = getAverageRGB(imageDivs[i].querySelector('img'));
+                rgb2 = getAverageRGB(imageDivs[i + 1].querySelector('img'));
+                if (imageDivs[i].offsetWidth + imageDivs[i+1].offsetWidth + imageDivs[i+2].offsetWidth <= window.innerWidth * 0.8) {
+                    rgb3 = getAverageRGB(imageDivs[i + 2].querySelector('img'));
                 }
             }
             bg1 = document.getElementById('gallery-bg1');
@@ -313,7 +341,7 @@ function updateBackgroundColorFromVisibleImage() {
 
                 activeBg = 0;
             }
-            lastImage = images[i];
+            lastImage = imageDivs[i];
             break;
         }
     }
@@ -367,7 +395,7 @@ function checkboxTriggered(event) {
     }
 }
 
-function filterImages() {
+function filterImages() { //TODO
     const images = document.querySelectorAll('img.galleryimg');
     const checkedCategories = Array.from(checkboxes)
         .filter(checkbox => document.querySelector(checkbox).checked)

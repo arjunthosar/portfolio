@@ -89,6 +89,7 @@ nav a {
     overflow: hidden;
     position: absolute;
     z-index: 0;
+    pointer-events: none;
 }
 
 .slide {
@@ -436,13 +437,38 @@ footer p {
     padding: 0 10vw 10vw 10vw;
 }
 
-.galleryimg{
+.galleryImg {
+    height: 100%;
+    width: 100%;
+    display: block;
+    z-index: 1;
+}
+
+.loadingGalleryImg, .loadedGalleryImg {
+    position: relative;
     max-width: 38vw;
     height: calc(38vw * 2/3);
+    overflow: hidden;
+}
+
+.loadingGif {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 64px;
+    height: 64px;
+    transform: translate(-50%, -50%);
+    z-index: 1;
 }
 
 @media (max-width: 768px) {
-    .galleryimg{
+    .galleryImg{
+        height: 100%;
+        width: 100%;
+    }
+
+    .loadingGalleryImg, .loadedGalleryImg {
+        position: relative;
         max-width: none;
         width: 74vw;
         height: auto;
@@ -530,7 +556,7 @@ footer p {
 
 #close-icon {
     position: relative;
-    font-size: 50px;
+    font-size: 65px;
     color: white;
     opacity: 0.5;
     left:2vw;
