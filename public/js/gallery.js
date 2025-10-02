@@ -11,7 +11,7 @@ toggle.addEventListener('click', () => {
 
 /* Generate gallery */
 const gallerydiv = document.getElementById('gallery-container');
-const AMOUNT_OF_IMAGES = 269;
+const AMOUNT_OF_IMAGES = 282;
 const nums = Array.from({length: AMOUNT_OF_IMAGES}, (v, k) => k + 1);
 let originalOrder = [];
 const excludedNums = [];
@@ -365,7 +365,7 @@ let lastTime = Date.now();
 // Run on scroll and on load
 window.addEventListener('scroll', updateBackgroundColorFromVisibleImage);
 window.addEventListener('load', updateBackgroundColorFromVisibleImage);
-const checkboxes = ['#nature', '#portraits', '#macro', '#city', '#other'];
+const checkboxes = ['#nature', '#portraits', '#city', '#other'];
 
 checkboxes.forEach(id => {
     document.querySelector(id).addEventListener('change', checkboxTriggered);
@@ -395,70 +395,86 @@ function checkboxTriggered(event) {
     }
 }
 
-function filterImages() { //TODO
-    const images = document.querySelectorAll('img.galleryimg');
+function filterImages() {
+    const imageDivs = document.querySelectorAll('div.loadingGalleryImg, div.loadedGalleryImg');
     const checkedCategories = Array.from(checkboxes)
         .filter(checkbox => document.querySelector(checkbox).checked)
         .map(checkbox => checkbox.replace('#', ''));
-    images.forEach(img => {
-        const imgCategory = img.dataset.category;
-        if (checkedCategories.includes(imgCategory)) {
-            img.style.display = '';
+
+    imageDivs.forEach(div => {
+        const img = div.querySelector('img.galleryImg');
+        if (!img) return;
+
+        if (checkedCategories.includes(img.dataset.category)) {
+            div.style.display = '';
         } else {
-            img.style.display = 'none';
+            div.style.display = 'none';
         }
     });
 }
 
 function sortImages() {
     const checked = document.querySelector('#recent').checked;
-    if (checked) {
-        while (gallerydiv.firstChild) {
-            gallerydiv.removeChild(gallerydiv.firstChild);
-        }
-        for (i = AMOUNT_OF_IMAGES; i > 0; i--) {
-            if (excludedNums.includes(i)) continue;
-            const image = document.createElement('img');
-            image.src = 'assets/gallery/' + i + '.jpg';
-            const filename = i + '.jpg';
-            const matched = data.find(item => item.filename === filename);
-            if (matched) {
-                image.dataset.category = matched.category;
-            }
-            image.className = 'galleryimg';
-            image.id = i;
-            gallerydiv.appendChild(image);
-        }
-        filterImages();
-    } else {
-        const nums = [...originalOrder]; 
-        while (gallerydiv.firstChild) {
-            gallerydiv.removeChild(gallerydiv.firstChild);
-        }
-        while (nums.length > 0) {
-            nums.forEach(i => {
-                if (excludedNums.includes(i)) return;
-                const image = document.createElement('img');
-                image.src = 'assets/gallery/' + i + '.jpg';
-                const filename = i + '.jpg';
-                const matched = data.find(item => item.filename === filename);
-                if (matched) {
-                    image.dataset.category = matched.category;
-                }
-                image.className = 'galleryimg';
-                image.id = i;
-                gallerydiv.appendChild(image);
-                nums.splice(nums.indexOf(i), 1);
-            });
-        }
-        filterImages();
+    while (gallerydiv.firstChild) {
+        gallerydiv.removeChild(gallerydiv.firstChild);
     }
+
+    let nums;
+    if (checked) {
+        nums = [];
+        for (let i = AMOUNT_OF_IMAGES; i > 0; i--) {
+            if (!excludedNums.includes(i)) nums.push(i);
+        }
+    } else {
+        nums = [...originalOrder].filter(i => !excludedNums.includes(i));
+    }
+
+    nums.forEach(i => {
+        const imageDiv = document.createElement('div');
+        imageDiv.className = 'loadingGalleryImg';
+        imageDiv.id = i;
+
+        const image = document.createElement('img');
+        const src = `assets/gallery/${window.innerWidth < 768 ? `${i}m.jpg` : `${i}.jpg`}`;
+        image.setAttribute('data-src', src);
+        image.className = 'galleryImg';
+
+        const filename = `${i}.jpg`;
+        const matched = data.find(item => item.filename === filename);
+        if (matched) {
+            image.dataset.category = matched.category;
+            imageDiv.style.aspectRatio = matched.width / matched.height;
+        }
+        image.id = i;
+        image.oncontextmenu = () => false;
+
+        const loadingImage = document.createElement('img');
+        loadingImage.src = 'assets/loading.gif';
+        loadingImage.className = 'loadingGif';
+
+        image.onload = function() {
+            this.parentNode.className = 'loadedGalleryImg';
+            this.parentNode.removeChild(this.parentNode.firstChild); // remove loading gif
+        };
+
+        imageDiv.appendChild(loadingImage);
+        imageDiv.appendChild(image);
+        gallerydiv.appendChild(imageDiv);
+    });
+
+    filterImages();
+
+    // Unveil images (lazy load)
+    $("img").unveil(window.innerWidth < 768 ? 1000 : 500);
 }
 
-
+// Update loading logic for new structure
 let loadedCount = 0;
-const images = document.querySelectorAll('img.galleryimg');
-images.forEach(img => {
+const imageDivs = document.querySelectorAll('div.loadingGalleryImg, div.loadedGalleryImg');
+imageDivs.forEach(div => {
+    const img = div.querySelector('img.galleryImg');
+    if (!img) return;
+
     if (img.complete) {
         loadedCount++;
         if (loadedCount >= 6) {
@@ -483,7 +499,6 @@ images.forEach(img => {
     }
 });
 
-if (loadedCount === images.length) {
+if (loadedCount === imageDivs.length) {
     document.body.classList.remove('loading');
 }
-

@@ -1,3 +1,4 @@
 /public/assets/gallery/*.jpg
 /public/assets/gallery/image_categories.json
 *.env
+/public/assets/gallery/galleryinator
