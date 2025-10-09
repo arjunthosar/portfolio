@@ -41,7 +41,7 @@ header {
     width: 100vw;
     height: 10vh;
     border-radius: 0 0 16px 16px;
-    z-index: 1000;
+    z-index: 100;
 }
 
 
@@ -49,6 +49,7 @@ header {
 .logo {
     /* Make logo font bold and font size 1.5rem */
     font-weight: bold;
+    z-index: inherit;
 }
 
 .logo a {
@@ -57,6 +58,10 @@ header {
     /* Remove underline from link */
     text-decoration: none;
     font-size: 48px;
+}
+
+nav {
+    z-index: inherit;
 }
 
 /* Style links in nav */
@@ -69,6 +74,11 @@ nav a {
     margin-left: 24px;
     font-size: 32px;
     font-family: 'Zain';
+    transition: font-size 0.2s ease;
+}
+
+nav a:hover {
+    font-size: 36px;
 }
 
 /* Style menu toggle */
@@ -88,7 +98,6 @@ nav a {
     height: 90vh;
     overflow: hidden;
     position: absolute;
-    z-index: 0;
     pointer-events: none;
 }
 
@@ -134,6 +143,7 @@ nav a {
 .banner {
     height: 90vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -141,44 +151,95 @@ nav a {
     position: relative;
 }
 
-.banner::before {
-    content: '';
+.background-darkener {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.2);
-    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 0;
 }
 
-.banner-content {
+.banner-text {
     position: relative;
-    z-index: 2;
-    padding: 0 16px;
 }
 
 .banner h1 {
     font-size: 64px;
-    margin-bottom: 16px;
 }
 
 .banner p {
     font-size: 32px;
 }
 
-.home-about {
-    height: 100vh;
-    width: 100%;
-    flex-direction: row;;
+.button-container {
+    position: relative;
+    display: flex;
+    flex-direction: row;
     justify-content: center;
+    gap: 150px;
+    margin-top: 64px;
+    font-size: 3rem;
+    flex-wrap: wrap;
 }
 
-.home-about-image {
-    width: 20vw;
-    height: auto;
-    aspect-ratio: 1;
+.button-container a {
+    text-decoration: none;
+    color: #fff;
+    transition: color 0.3s ease;
 }
+
+.nav-button-container {
+    height: 250px;
+    width: 250px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 15%;
+}
+
+.nav-icon {
+    height: 125px;
+    width: 125px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: scale 0.25s ease;
+    position: absolute;
+    z-index: 3;
+}
+
+.nav-image {
+    height: 100%;
+    width: 100%;
+    transition: scale 0.25s ease;
+    z-index: 1;
+    border-radius: 15%;
+    position: relative;
+}
+
+.nav-image-darkener {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(0, 0, 0);
+    opacity: 0.6;
+    border-radius: 15%;
+    transition: opacity 0.25s ease;
+    z-index: 2;
+}
+
+.nav-button-container:hover .nav-image-darkener {
+    opacity: 0.2;
+}
+
+.nav-button-container:hover .nav-image {
+    scale: 1.2;
+}
+
 
 /* Media query for screen width less than 768px */
 @media (max-width: 768px) {
@@ -201,6 +262,20 @@ nav a {
     padding: 16px;
     border-radius: 35px;
     /* On top of everything */
+    }
+
+    .button-container {
+        gap: 50px;
+    }
+
+    .nav-button-container {
+        height: 125px;
+        width: 125px;
+    }
+
+    .nav-icon {
+        height: 75px;
+        width: 75px;
     }
 
     /* Make nav active */
@@ -633,7 +708,7 @@ footer p {
 
 #gallery-title {
     color: white;
-    font-size: 24px;
+    font-size: 2rem;
     font-weight: bold;
     text-align: center;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -642,16 +717,26 @@ footer p {
 
 #gallery-desc {
     color: white;
-    font-size: 20px;
+    font-size: 1.5rem;
     text-align: center;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     z-index: 1000;
-    padding: 10px 0;
+    margin: 0 10px;
 }
 
 .checkboxText {
-    font-size: 20px;
+    font-size: 1.3rem;
     opacity: 1;
+}
+
+@media (max-width: 768px) {
+    #gallery-title {
+        font-size: 1.5rem;
+    }
+    #gallery-desc {
+        font-size: 1rem;
+    }
+    
 }
 
 /* Contact page */

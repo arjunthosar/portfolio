@@ -14,7 +14,7 @@ const gallerydiv = document.getElementById('gallery-container');
 const AMOUNT_OF_IMAGES = 282;
 const nums = Array.from({length: AMOUNT_OF_IMAGES}, (v, k) => k + 1);
 let originalOrder = [];
-const excludedNums = [];
+const excludedNums = [135];
 let data;
 
 fetch('js/image_categories.json')
@@ -193,7 +193,7 @@ document.addEventListener('click', function(e) {
     closeButton.addEventListener('click', close);
     overlay.appendChild(closeButton);
 
-    const imageDivs = document.querySelectorAll('.loadedGalleryImg:not([style*="display: none"])'); //TODO
+    const imageDivs = document.querySelectorAll('.loadedGalleryImg:not([style*="display: none"]), .loadingGalleryImg:not([style*="display: none"])');
     console.log(imageDivs);
     var originalIndex = Array.from(imageDivs).indexOf(original.parentNode);
     console.log(originalIndex);
@@ -235,17 +235,20 @@ document.addEventListener('click', function(e) {
         if (originalIndex === imageDivs.length - 1) {return;}
         originalIndex += 1;
         original = imageDivs[originalIndex];
-        document.getElementById('fullscreen-img').src = original.querySelector('img').src;
-        const imgRGB = getAverageRGBLeftRight(original.querySelector('img'));
+        original.scrollIntoView();
+        originalImage = original.querySelector('img.galleryImg');
+        $(originalImage).trigger('unveil');
+        document.getElementById('fullscreen-img').src = originalImage.dataset.src;
+        const imgRGB = getAverageRGBLeftRight(originalImage);
         overlay.style.background = `linear-gradient(to right, rgba(${imgRGB[0].r}, ${imgRGB[0].g}, ${imgRGB[0].b}), rgba(${imgRGB[1].r}, ${imgRGB[1].g}, ${imgRGB[1].b}))`;
-        const aspectRatio = original.querySelector('img').naturalWidth / original.querySelector('img').naturalHeight;
+        const aspectRatio = originalImage.naturalWidth / originalImage.naturalHeight;
         if (window.innerWidth <= 768) {
             clone.style.width = '90vw';
             clone.style.height = (0.90*window.innerWidth/aspectRatio) + 'px';
         } else {
             clone.style.maxWidth = 'none';
-            clone.style.width = (original.width * scale) + 'px';
-            clone.style.height = (original.width * scale / aspectRatio) + 'px';
+            clone.style.width = (originalImage.width * scale) + 'px';
+            clone.style.height = (originalImage.width * scale / aspectRatio) + 'px';
         }
         if (imageDivs[originalIndex - 1] && originalIndex-1 === 0) {
             const prevButton = document.createElement('div');
@@ -269,17 +272,20 @@ document.addEventListener('click', function(e) {
         if (originalIndex === 0) {return;}
         originalIndex -= 1;
         original = imageDivs[originalIndex];
-        document.getElementById('fullscreen-img').src = original.querySelector('img').src;
-        const imgRGB = getAverageRGBLeftRight(original.querySelector('img'));
+        original.scrollIntoView();
+        originalImage = original.querySelector('img.galleryImg');
+        $(originalImage).trigger('unveil');
+        document.getElementById('fullscreen-img').src = originalImage.dataset.src;
+        const imgRGB = getAverageRGBLeftRight(originalImage);
         overlay.style.background = `linear-gradient(to right, rgba(${imgRGB[0].r}, ${imgRGB[0].g}, ${imgRGB[0].b}), rgba(${imgRGB[1].r}, ${imgRGB[1].g}, ${imgRGB[1].b}))`;
-        const aspectRatio = original.querySelector('img').naturalWidth / original.querySelector('img').naturalHeight;
+        const aspectRatio = originalImage.naturalWidth / originalImage.naturalHeight;
         if (window.innerWidth <= 768) {
             clone.style.width = '90vw';
             clone.style.height = (0.90*window.innerWidth/aspectRatio) + 'px';
         } else {
             clone.style.maxWidth = 'none';
-            clone.style.width = (original.width * scale) + 'px';
-            clone.style.height = (original.width * scale / aspectRatio) + 'px';
+            clone.style.width = (originalImage.width * scale) + 'px';
+            clone.style.height = (originalImage.width * scale / aspectRatio) + 'px';
         }
         if (imageDivs[originalIndex + 1] && originalIndex+1 === imageDivs.length - 1) {
             const nextButton = document.createElement('div');
