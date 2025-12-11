@@ -1,3 +1,19 @@
+//Fade in / Fade out
+document.addEventListener('DOMContentLoaded', () => {
+    document.body.classList.add('fade-in');
+})
+const links = document.querySelectorAll('nav a');
+links.forEach(link => {
+    link.addEventListener('click', () => {
+        event.preventDefault();
+        document.body.classList.remove('fade-in');
+        document.body.classList.add('fade-out');
+        setTimeout(() => {
+            window.location.href = link.href;
+        }, 250)
+    });
+});
+
 /* Get menu toggle element */
 const toggle = document.getElementById('toggle');
 /* Get nav element */
@@ -11,7 +27,7 @@ toggle.addEventListener('click', () => {
 
 /* Generate gallery */
 const gallerydiv = document.getElementById('gallery-container');
-const AMOUNT_OF_IMAGES = 282;
+const AMOUNT_OF_IMAGES = 279;
 const nums = Array.from({length: AMOUNT_OF_IMAGES}, (v, k) => k + 1);
 let originalOrder = [];
 const excludedNums = [135];
@@ -51,8 +67,12 @@ fetch('js/image_categories.json')
 
             // Add image to the gallery
             image.onload = function() {
-                this.parentNode.className = 'loadedGalleryImg';
-                this.parentNode.removeChild(this.parentNode.firstChild);
+                        this.parentNode.className = 'loadedGalleryImg';
+                        this.parentNode.removeChild(this.parentNode.firstChild);
+                        // Set grid row span so images of different aspect ratios fit together
+                        setGridSpan(this.parentNode);
+                        // Call setBackgroundShadow after image is fully loaded
+                        setTimeout(() => setBackgroundShadow(this.parentNode), 0);
             };
             originalOrder.push(i);
 
@@ -308,56 +328,59 @@ document.addEventListener('click', function(e) {
 
 var activeBg = 1;
 var lastImage;
-function updateBackgroundColorFromVisibleImage() {
-    const imageDivs = document.querySelectorAll('.loadedGalleryImg:not([style*="display: none"])');
-    for (let i = 0; i < imageDivs.length - 1; i++) {
-        const rect = imageDivs[i].getBoundingClientRect();
-        if (window.innerWidth >= 768 ? (rect.top >= 0) : (rect.bottom >= window.innerHeight*0.4 && rect.bottom <= window.innerHeight)) {
-            if (lastImage === imageDivs[i]) {
-                break;
-            }
-            var rgb1, rgb2, rgb3;
-            if (window.innerWidth < 768) {
-                const rgbLR = getAverageRGBLeftRight(imageDivs[i].querySelector('img'));
-                rgb1 = rgbLR[0];
-                rgb2 = rgbLR[1];
-            } else {
-                rgb1 = getAverageRGB(imageDivs[i].querySelector('img'));
-                rgb2 = getAverageRGB(imageDivs[i + 1].querySelector('img'));
-                if (imageDivs[i].offsetWidth + imageDivs[i+1].offsetWidth + imageDivs[i+2].offsetWidth <= window.innerWidth * 0.8) {
-                    rgb3 = getAverageRGB(imageDivs[i + 2].querySelector('img'));
-                }
-            }
-            bg1 = document.getElementById('gallery-bg1');
-            bg2 = document.getElementById('gallery-bg2');
-            if (activeBg === 1) {
-                bg2.style.zIndex = -1;
-                bg1.style.zIndex = -2;
-                bg2.style.background = `linear-gradient(to right, rgb(${rgb1.r}, ${rgb1.g}, ${rgb1.b}), rgb(${rgb2.r}, ${rgb2.g}, ${rgb2.b})` + (rgb3 ? `, rgb(${rgb3.r}, ${rgb3.g}, ${rgb3.b})` : '') + ')';
-                bg2.style.transition = 'opacity .2s ease-in';
-                bg2.style.opacity = 1;
+// function updateBackgroundColorFromVisibleImage() {
+//     const imageDivs = document.querySelectorAll('.loadedGalleryImg:not([style*="display: none"])');
+//     for (let i = 0; i < imageDivs.length - 1; i++) {
+//         const rect = imageDivs[i].getBoundingClientRect();
+//         if (window.innerWidth >= 768 ? (rect.top >= 0) : (rect.bottom >= window.innerHeight*0.4 && rect.bottom <= window.innerHeight)) {
+//             if (lastImage === imageDivs[i]) {
+//                 break;
+//             }
+//             var rgb1, rgb2, rgb3;
+//             if (window.innerWidth < 768) {
+//                 const rgbLR = getAverageRGBLeftRight(imageDivs[i].querySelector('img'));
+//                 rgb1 = rgbLR[0];
+//                 rgb2 = rgbLR[1];
+//             } else {
+//                 rgb1 = getAverageRGB(imageDivs[i].querySelector('img'));
+//                 rgb2 = getAverageRGB(imageDivs[i + 1].querySelector('img'));
+//                 if (imageDivs[i].offsetWidth + imageDivs[i+1].offsetWidth + imageDivs[i+2].offsetWidth <= window.innerWidth * 0.8) {
+//                     rgb3 = getAverageRGB(imageDivs[i + 2].querySelector('img'));
+//                 }
+//             }
+//             bg1 = document.getElementById('gallery-bg1');
+//             bg2 = document.getElementById('gallery-bg2');
+//                 bg2.style.zIndex = -2;
+//             }
+//             // var activeBg = 1;
+//             // var lastImage;
+//             // function updateBackgroundColorFromVisibleImage() {
+//             //     const imageDivs = document.querySelectorAll('.loadedGalleryImg:not([style*="display: none"])');
+//             //     for (let i = 0; i < imageDivs.length - 1; i++) {
+//             //         const rect = imageDivs[i].getBoundingClientRect();
+//             //         if (window.innerWidth >= 768 ? (rect.top >= 0) : (rect.bottom >= window.innerHeight*0.4 && rect.bottom <= window.innerHeight)) {/* Lines 334-370 omitted */}
+//             //     }
+//             // }
 
-                activeBg = 0;
-            } else if (activeBg === 2) {
-                bg1.style.zIndex = -1;
-                bg2.style.zIndex = -2;
-                bg1.style.background = `linear-gradient(to right, rgb(${rgb1.r}, ${rgb1.g}, ${rgb1.b}), rgb(${rgb2.r}, ${rgb2.g}, ${rgb2.b})` + (rgb3 ? `, rgb(${rgb3.r}, ${rgb3.g}, ${rgb3.b})` : '') + ')';
-                bg1.style.transition = 'opacity .2s ease-in';
-                bg1.style.opacity = 1;
+//             // document.querySelector('#gallery-bg1').addEventListener('transitionend', () => {
+//             //     bg2.style.transition = 'none';
+//             //     bg2.style.opacity = 0;
+//             //     activeBg = 1;
+//             // })
 
-                activeBg = 0;
-            }
-            lastImage = imageDivs[i];
-            break;
-        }
-    }
-}
+//             // document.querySelector('#gallery-bg2').addEventListener('transitionend', () => {
+//             //     bg1.style.transition = 'none';
+//             //     bg1.style.opacity = 0;
+//             //     activeBg = 2;
+//             // })
 
-document.querySelector('#gallery-bg1').addEventListener('transitionend', () => {
-    bg2.style.transition = 'none';
-    bg2.style.opacity = 0;
-    activeBg = 1;
-})
+//             // let lastScrollY = window.scrollY;
+//             // let lastTime = Date.now();
+
+//             // window.addEventListener('scroll', updateBackgroundColorFromVisibleImage);
+//             // window.addEventListener('load', updateBackgroundColorFromVisibleImage);
+//     }
+// }
 
 document.querySelector('#gallery-bg2').addEventListener('transitionend', () => {
     bg1.style.transition = 'none';
@@ -461,6 +484,8 @@ function sortImages() {
         image.onload = function() {
             this.parentNode.className = 'loadedGalleryImg';
             this.parentNode.removeChild(this.parentNode.firstChild); // remove loading gif
+            // adjust grid span
+            setGridSpan(this.parentNode);
         };
 
         imageDiv.appendChild(loadingImage);
@@ -484,8 +509,10 @@ imageDivs.forEach(div => {
     if (img.complete) {
         loadedCount++;
         if (loadedCount >= 6) {
-            document.body.classList.remove('loading');
-            updateBackgroundColorFromVisibleImage();
+                document.body.classList.remove('loading');
+                updateBackgroundColorFromVisibleImage();
+                // compute grid spans once some images have loaded
+                computeAllGridSpans();
         }
     } else {
         img.addEventListener('load', () => {
@@ -493,6 +520,7 @@ imageDivs.forEach(div => {
             if (loadedCount >= 6) {
                 document.body.classList.remove('loading');
                 updateBackgroundColorFromVisibleImage();
+                    computeAllGridSpans();
             }
         });
         img.addEventListener('error', () => {
@@ -500,6 +528,7 @@ imageDivs.forEach(div => {
             if (loadedCount >= 6) {
                 document.body.classList.remove('loading');
                 updateBackgroundColorFromVisibleImage();
+                    computeAllGridSpans();
             }
         });
     }
@@ -507,4 +536,57 @@ imageDivs.forEach(div => {
 
 if (loadedCount === imageDivs.length) {
     document.body.classList.remove('loading');
+    computeAllGridSpans();
 }
+
+// Calculate grid-row span for a grid item so varying aspect ratios fit together
+function setGridSpan(item) {
+    if (!item) return;
+    const gallery = gallerydiv;
+    const computed = getComputedStyle(gallery);
+    const rowHeight = parseFloat(computed.getPropertyValue('grid-auto-rows')) || 8;
+    // 'gap' may return e.g. '16px' so parseFloat works
+    const rowGap = parseFloat(computed.getPropertyValue('gap')) || 0;
+
+    const img = item.querySelector('img.galleryImg');
+    let itemHeight = item.getBoundingClientRect().height;
+
+    if (img && img.naturalWidth && img.naturalHeight) {
+        // calculate rendered height based on current item width
+        const renderedWidth = item.clientWidth || img.width || img.naturalWidth;
+        itemHeight = (img.naturalHeight * (renderedWidth / img.naturalWidth));
+    } else if (item.style && item.style.aspectRatio) {
+        const ratio = parseFloat(item.style.aspectRatio);
+        if (ratio > 0) itemHeight = item.clientWidth / ratio;
+    }
+
+    const span = Math.ceil((itemHeight + rowGap) / (rowHeight + rowGap));
+    item.style.gridRowEnd = `span ${span}`;
+}
+
+function computeAllGridSpans() {
+    const items = gallerydiv.querySelectorAll('.loadingGalleryImg, .loadedGalleryImg');
+    items.forEach(item => setGridSpan(item));
+}
+
+function setBackgroundShadow(item) {
+    if (!item) return;
+    const img = item.querySelector('img');
+    if (!img || !img.complete) return;
+    
+    try {
+        const rgb = getAverageRGB(img);
+        item.style.boxShadow = `0px 0px 50px 10px rgba(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+    } catch (e) {
+        console.warn('Failed to set background shadow:', e);
+    }
+}
+
+// Recompute spans on resize (debounced)
+let _resizeTimer = null;
+window.addEventListener('resize', () => {
+    clearTimeout(_resizeTimer);
+    _resizeTimer = setTimeout(() => {
+        computeAllGridSpans();
+    }, 150);
+});

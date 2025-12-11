@@ -15,13 +15,32 @@ html {
     src: url('../assets/Zain-Regular.ttf') format('truetype');
 }
 
-#darkbackground {
-    background-color: #111;
+.darkbackground {
+    background-color: #577a5a;
 }
 
 /* Add font family and color to body */
 body {
     font-family: 'Zain', sans-serif;
+    opacity: 0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in forwards;
+}
+
+.fade-out {
+  animation: fadeOut 0.3s ease-out forwards;
 }
 
 /* Style header */
@@ -45,19 +64,13 @@ header {
 }
 
 
-/* Style logo */
-.logo {
-    /* Make logo font bold and font size 1.5rem */
-    font-weight: bold;
-    z-index: inherit;
-}
-
-.logo a {
-    /* Make link color white */
-    color: white;
-    /* Remove underline from link */
-    text-decoration: none;
+#name {
     font-size: 48px;
+    font-family: 'Zain', sans-serif;
+    font-weight: bold;
+    position: relative;
+    z-index: inherit;
+    color: white;
 }
 
 nav {
@@ -95,10 +108,10 @@ nav a:hover {
 
 .slider {
     width: 100%;
-    height: 90vh;
+    height: auto;
     overflow: hidden;
-    position: absolute;
     pointer-events: none;
+    position: relative;
 }
 
 .slide {
@@ -114,16 +127,16 @@ nav a:hover {
     background-color: #c2dee2;
     background-image: url("../assets/homeBackground.webp");
     background-size: cover;
-    background-position: center;
+    background-position: top;
     background-repeat: no-repeat;
     width: 100%;
-    height: 100%;
+    height: auto;
     overflow: hidden;
 }
 
 .home-container .slide img {
     width: auto;
-    height: 75vh;
+    height: 65vh;
     object-fit: cover;
     display: block;
     padding: 20px;
@@ -161,16 +174,22 @@ nav a:hover {
     z-index: 0;
 }
 
+/* Note: the visual height of this element is adjusted at runtime
+   by `public/js/index.js` to match the full height of the
+   `.home-container` (including the slider), because the slider
+   is positioned in the normal flow and its height isn't known
+   until images load. */
+
 .banner-text {
     position: relative;
 }
 
 .banner h1 {
-    font-size: 64px;
+    font-size: 96px;
 }
 
 .banner p {
-    font-size: 32px;
+    font-size: 48px;
 }
 
 .button-container {
@@ -178,10 +197,10 @@ nav a:hover {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    gap: 150px;
+    align-items: center;
+    gap:50px;
     margin-top: 64px;
     font-size: 3rem;
-    flex-wrap: wrap;
 }
 
 .button-container a {
@@ -190,12 +209,38 @@ nav a:hover {
     transition: color 0.3s ease;
 }
 
-.nav-button-container {
+.nav-button {
     height: 250px;
     width: 250px;
     position: relative;
     overflow: hidden;
-    border-radius: 15%;
+    border-radius: 45px;
+}
+
+.big-nav-button {
+    height: 300px;
+    width: 520px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 45px;
+}
+
+#button-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 84px;
+    font-family: 'Zain', sans-serif;
+    color: #fff;
+    z-index: 2;
+    transition: font-size 0.25s ease;
+}
+
+#bottom-nav-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
 }
 
 .nav-icon {
@@ -210,11 +255,11 @@ nav a:hover {
 }
 
 .nav-image {
-    height: 100%;
     width: 100%;
+    height: 100%;
+    object-fit: cover;
     transition: scale 0.25s ease;
     z-index: 1;
-    border-radius: 15%;
     position: relative;
 }
 
@@ -225,43 +270,61 @@ nav a:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgb(0, 0, 0);
+    background: rgb(0, 0, 0, 0.5);
     opacity: 0.6;
     border-radius: 15%;
     transition: opacity 0.25s ease;
     z-index: 2;
 }
 
-.nav-button-container:hover .nav-image-darkener {
+.nav-button:hover .nav-image-darkener {
     opacity: 0.2;
 }
 
-.nav-button-container:hover .nav-image {
+.big-nav-button:hover .nav-image-darkener {
+    opacity: 0.2;
+}
+
+.nav-button:hover .nav-image {
     scale: 1.2;
 }
 
+.big-nav-button:hover .nav-image {
+    scale: 1.2;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 64px;
+    font-weight: bold;
+    margin: 64px 0 0 0;
+    color: #ffffff;
+    font-family: 'Zain', sans-serif;
+    z-index: 200;
+    position: relative;
+}
 
 /* Media query for screen width less than 768px */
 @media (max-width: 768px) {
     /* Hide nav by default */
     nav {
-    display: none;
-    /* Make nav display as flex box */
-    flex-direction: column;
-    /* Make nav background color dark */
-    background-color: rgba(0, 0, 0, 0.7);
-    /* Make nav position absolute */
-    position: absolute;
-    /* Make nav top position 60px */
-    top: 60px;
-    /* Make nav right position 0 */
-    right: 0;
-    /* Make nav width 200px */
-    width: 200px;
-    /* Add padding to nav */
-    padding: 16px;
-    border-radius: 35px;
-    /* On top of everything */
+      display: none;
+      /* Make nav display as flex box */
+      flex-direction: column;
+      /* Make nav background color dark */
+      background-color: rgba(0, 0, 0, 0.7);
+      /* Make nav position absolute */
+      position: absolute;
+      /* Make nav top position 60px */
+      top: 60px;
+      /* Make nav right position 0 */
+      right: 0;
+      /* Make nav width 200px */
+      width: 200px;
+      /* Add padding to nav */
+      padding: 16px;
+      border-radius: 35px;
+      /* On top of everything */
     }
 
     .button-container {
@@ -280,19 +343,19 @@ nav a:hover {
 
     /* Make nav active */
     nav.active {
-    /* Make nav display as flex box */
-    display: flex;
-    z-index: 1000;
+      /* Make nav display as flex box */
+      display: flex;
+      z-index: 1000;
     }
 
     /* Make menu toggle visible */
     .menu-toggle {
-    /* Make menu toggle display as block */
-    display: block;
+      /* Make menu toggle display as block */
+      display: block;
     }
 
     .home-container .slide img {
-        height: 50vh;
+        height: 40vh;
     }
 }
 
@@ -506,37 +569,61 @@ footer p {
 }
 
 #gallery-bg1 {
-  opacity: 1;
-  z-index: -1;
+    opacity: 1;
+    z-index: -1;
+    background: #9ba19b !important;
 }
 
 #gallery-bg2 {
-  opacity: 0;
-  z-index: -2;
+    opacity: 0;
+    z-index: -2;
+    background: #9ba19b !important;
 }
 
 #gallery-container {
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2vw;
-    width: 100vw;
-    padding: 0 10vw 10vw 10vw;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2vw;
+        grid-auto-rows: 8px;
+        padding: 3vw;
+        width: 100%;
+        align-items: start;
+        justify-items: stretch;
+}
+
+@media (max-width: 1200px) {
+    #gallery-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    #gallery-container {
+        grid-template-columns: repeat(1, 1fr);
+        gap: 4vw;
+        padding: 4vw;
+        justify-items: center;
+    }
 }
 
 .galleryImg {
-    height: 100%;
     width: 100%;
+    height: 100%;
     display: block;
-    z-index: 1;
+    object-fit: cover;
+    z-index: 2;
 }
 
 .loadingGalleryImg, .loadedGalleryImg {
-    position: relative;
-    max-width: 38vw;
-    height: calc(38vw * 2/3);
-    overflow: hidden;
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        /*
+            The inline `aspect-ratio` is set by `gallery.js` (imageDiv.style.aspectRatio).
+            That preserves the intrinsic proportions of images while the grid places
+            the item. JS reads the rendered height and assigns a `grid-row-end: span N`
+            so tiles of different aspect ratios fit together neatly.
+        */
 }
 
 .loadingGif {
@@ -833,6 +920,12 @@ footer p {
     margin-bottom: 20px;
     font-size: 28px;
     color: #e0e0e0;
+}
+
+.contact-container p {
+    color: #e0e0e0;
+    text-align: center;
+    font-size: 16px;
 }
 
 #contact-form {

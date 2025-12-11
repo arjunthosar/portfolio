@@ -1,3 +1,19 @@
+//Fade in / Fade out
+document.addEventListener('DOMContentLoaded', () => {
+    document.body.classList.add('fade-in');
+})
+const links = document.querySelectorAll('nav a');
+links.forEach(link => {
+    link.addEventListener('click', () => {
+        event.preventDefault();
+        document.body.classList.remove('fade-in');
+        document.body.classList.add('fade-out');
+        setTimeout(() => {
+            window.location.href = link.href;
+        }, 500)
+    });
+});
+
 /* Get menu toggle element */
 const toggle = document.getElementById('toggle');
 /* Get nav element */

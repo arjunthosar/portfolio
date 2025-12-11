@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>arjun.pics</title>
+    <title>Home | arjun.pics</title>
     <link rel="stylesheet" href="css/stylesheet.css">
 </head>
-<body>
+<body class="darkbackground">
     <div class="home-container">
         <header>
-            <div class="logo"><a href="index.html">arjun.pics</a></div>
+            <div id="name"><p>Arjun Thosar</p></div>
             <div class="menu-toggle" id="toggle">&#9776;</div>
             <nav id="nav">
                 <a href="index.html">Home</a>
@@ -19,7 +19,43 @@
             </nav>
         </header>
 
-        <div class="slider">
+        <div class="background-darkener"></div>
+        <section id="home" class="banner">
+            <div class="banner-text">
+                <h1>Arjun Thosar's Photography</h1>
+                <p>Capturing life's finest moments through my lens.</p>
+            </div>
+            <div class="button-container">
+                <a href="about.html">
+                    <div class="nav-button">
+                        <img class="nav-image" src="assets/about-img3.jpg">
+                        <div class="nav-image-darkener"></div>
+                        <img class="nav-icon" src="assets/aboutmeIcon.png">
+                    </div>
+                </a>
+                <a href="gallery.html">
+                    <div class="big-nav-button">
+                        <img class="nav-image" src="assets/gallery/271.jpg">
+                        <div class="nav-image-darkener"></div>
+                        <p id="button-label">Gallery</p>
+                    </div>
+                </a>
+                <a href="contact.html">
+                    <div class="nav-button">
+                        <img class="nav-image" src="assets/about-img2.jpg">
+                        <div class="nav-image-darkener"></div>
+                        <img class="nav-icon" src="assets/contactIcon.png">
+                    </div>
+                </a>
+            </div>
+        </section>
+
+           <h1 class="section-title">Recent Works</h1>
+           <!-- Slider moved outside the banner section so it sits as a separate
+               block below the buttons. It is sized by CSS/JS and participates
+               in normal document flow (so the background and darkener can
+               cover it). -->
+           <div class="slider">
             <div class="slide-track">
                 <div class="slide">
                     <img src="assets/gallery/266.jpg" alt="Slide 1">
@@ -83,41 +119,9 @@
                 </div>
             </div>
         </div>
-        <div class="background-darkener"></div>
-        <section id="home" class="banner">
-            <div class="banner-text">
-                <h1>Arjun Thosar's Photography</h1>
-                <p>Capturing life's finest moments through my lens.</p>
-            </div>
-            <div class="button-container">
-                <a href="about.html" class="button">
-                    <div class="nav-button-container">
-                        <img class="nav-image" src="assets/about-img3.jpg">
-                        <div class="nav-image-darkener"></div>
-                        <img class="nav-icon" src="assets/aboutmeIcon.png">
-                    </div>
-                </a>
-                <a href="gallery.html" class="button">
-                    <div class="nav-button-container">
-                        <img class="nav-image" src="assets/gallery/242.jpg">
-                        <div class="nav-image-darkener"></div>
-                        <img class="nav-icon" src="assets/galleryIcon.png">
-                    </div>
-                </a>
-                <a href="contact.html" class="button">
-                    <div class="nav-button-container">
-                        <img class="nav-image" src="assets/about-img1.jpg">
-                        <div class="nav-image-darkener"></div>
-                        <img class="nav-icon" src="assets/contactIcon.png">
-                    </div>
-                </a>
-            </div>
-
-        </section>
     </div>
     
     <script src="js/index.js"></script>
 
 </body>
 </html>
-
