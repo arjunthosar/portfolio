@@ -12,10 +12,10 @@
             <div id="name"><p>Arjun Thosar</p></div>
             <div class="menu-toggle" id="toggle">&#9776;</div>
             <nav id="nav">
-                <a href="index.html">Home</a>
-                <a href="about.html">About</a>
-                <a href="gallery.html">Gallery</a>
-                <a href="contact.html">Contact</a>
+            <a href="index.html"><img src="assets/home.png" class="header-icon"></a>
+            <a href="about.html"><img src="assets/aboutmeIcon.png" class="header-icon"></a>
+            <a href="gallery.html"><img src="assets/galleryIcon.png" class="header-icon"></a>
+            <a href="contact.html"><img src="assets/contactIcon.png" class="header-icon"></a>
             </nav>
         </header>
 
@@ -48,75 +48,51 @@
                     </div>
                 </a>
             </div>
+            <div class="mobile-button-container">
+                <a href="gallery.html">
+                    <div class="big-nav-button">
+                        <img class="nav-image" src="assets/gallery/271.jpg">
+                        <div class="nav-image-darkener"></div>
+                        <p id="button-label">Gallery</p>
+                    </div>
+                </a>
+                <div id="nav-bottom-row">
+                    <a href="about.html">
+                        <div class="nav-button">
+                            <img class="nav-image" src="assets/about-img3.jpg">
+                            <div class="nav-image-darkener"></div>
+                            <img class="nav-icon" src="assets/aboutmeIcon.png">
+                        </div>
+                    </a>
+                    <a href="contact.html">
+                        <div class="nav-button">
+                            <img class="nav-image" src="assets/about-img2.jpg">
+                            <div class="nav-image-darkener"></div>
+                            <img class="nav-icon" src="assets/contactIcon.png">
+                        </div>
+                    </a>
+                </div>
+            </div>
         </section>
-
-           <h1 class="section-title">Recent Works</h1>
-           <!-- Slider moved outside the banner section so it sits as a separate
-               block below the buttons. It is sized by CSS/JS and participates
-               in normal document flow (so the background and darkener can
-               cover it). -->
-           <div class="slider">
-            <div class="slide-track">
-                <div class="slide">
-                    <img src="assets/gallery/266.jpg" alt="Slide 1">
-                </div>
-                <div class="slide">
-                    <img src="assets/gallery/262.jpg" alt="Slide 2">
-                </div>
-                <div class="slide">
-                    <img src="assets/gallery/257.jpg" alt="Slide 3">
-                </div>
-                <div class="slide">
-                    <img src="assets/gallery/243.jpg" alt="Slide 4">
-                </div>
-                <div class="slide">
-                    <img src="assets/gallery/236.jpg" alt="Slide 5">
-                </div>
-                <div class="slide">
-                    <img src="assets/gallery/210.jpg" alt="Slide 6">
-                </div>
-                <div class="slide">
-                    <img src="assets/gallery/233.jpg" alt="Slide 7">
-                </div>
-                <div class="slide">
-                    <img src="assets/gallery/229.jpg" alt="Slide 8">
-                </div>
-                <div class="slide">
-                    <img src="assets/gallery/233.jpg" alt="Slide 9">
-                </div>
-                <div class="slide">
-                    <img src="assets/gallery/227.jpg" alt="Slide 10">
-                </div>
-                <div class="slide">
-                    <img src="assets/gallery/266.jpg" alt="Slide 1">
-                </div>
-                <div class="slide">
-                    <img src="assets/gallery/262.jpg" alt="Slide 2">
-                </div>
-                <div class="slide">
-                    <img src="assets/gallery/257.jpg" alt="Slide 3">
-                </div>
-                <div class="slide">
-                    <img src="assets/gallery/243.jpg" alt="Slide 4">
-                </div>
-                <div class="slide">
-                    <img src="assets/gallery/236.jpg" alt="Slide 5">
-                </div>
-                <div class="slide">
-                    <img src="assets/gallery/246.jpg" alt="Slide 6">
-                </div>
-                <div class="slide">
-                    <img src="assets/gallery/233.jpg" alt="Slide 7">
-                </div>
-                <div class="slide">
-                    <img src="assets/gallery/229.jpg" alt="Slide 8">
-                </div>
-                <div class="slide">
-                    <img src="assets/gallery/233.jpg" alt="Slide 9">
-                </div>
-                <div class="slide">
-                    <img src="assets/gallery/227.jpg" alt="Slide 10">
-                </div>
+        <!-- TODO: Ideally make it center the picture when arrow pressed. (maybe) Make it a constant slideshow that pauses when button is pressed-->
+        <h1 class="section-title">Recent Works</h1>
+        <div id="recent-works-div">
+            <!-- half text to describe works, half slideshow containing 10 pics -->
+            <div id="recent-works-text">
+                <h2>The Golden Lake</h2>
+                <p>A series of pictures taken at a lakefront during sunrise, artistically incorporating the silhouettes of Canadian geese to add to the magic of the moment.</p>
+            </div>
+            <div id="recent-works-slideshow">  
+                <div id="recent-prev-button">&#10094;</div>
+                    <div class="slider">
+                        <img class="slide" src="assets/gallery/227.jpg" alt="Recent Work">
+                        <img class="slide" src="assets/gallery/229.jpg" alt="Recent Work">
+                        <img class="slide" src="assets/gallery/233.jpg" alt="Recent Work">
+                        <img class="slide" src="assets/gallery/236.jpg" alt="Recent Work">
+                        <img class="slide" src="assets/gallery/243.jpg" alt="Recent Work">
+                        <img class="slide" src="assets/gallery/246.jpg" alt="Recent Work">
+                    </div>
+                <div id="recent-next-button">&#10095;</div>
             </div>
         </div>
     </div>

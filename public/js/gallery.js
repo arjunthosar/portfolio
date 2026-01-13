@@ -576,7 +576,10 @@ function setBackgroundShadow(item) {
     
     try {
         const rgb = getAverageRGB(img);
-        item.style.boxShadow = `0px 0px 50px 10px rgba(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+        const r = Math.min(rgb.r * 2, 255);
+        const g = Math.min(rgb.g * 2, 255);
+        const b = Math.min(rgb.b * 2, 255);
+        item.style.boxShadow = `0px 0px 50px 10px rgba(${r}, ${g}, ${b})`;
     } catch (e) {
         console.warn('Failed to set background shadow:', e);
     }
