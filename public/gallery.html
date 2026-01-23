@@ -24,10 +24,10 @@
     </div>
 
     <div id="gallery-desc">
-        <p>Click on an image to zoom in on it!</p>
+        <p>Click on an image to zoom in on it!<br>Click on a filter to filter the photos. To stop filtering, click the same filter again.</p>
     </div>
 
-    <div id="filters-container">
+    <!-- <div id="filters-container">
         <label class="checkboxAndIcon">
             <p class="checkboxText" id="recentText">Recent</p>
             <img src="assets/recentIcon.png" alt="Recent Icon" class="checkboxIcon">
@@ -54,10 +54,28 @@
             <img src="assets/otherIcon.png" alt="Other Icon" class="checkboxIcon">
             <input type="checkbox" id="other" name="other" checked>
         </label>
-    </div>
+    </div> -->
 
+    <!-- TODO: make a tabs based filter. One "all" tab. One tab for each of the 4 categories. Smooth animation when switching between tabs, like files in a cabinet. make it look slick and translucent. -->
     <div id="gallery-container">
-        <!-- Gallery Pics -->
+        <!-- <div class="tab active-tab" id="all-tab">All</div> -->
+        <div id="tab-container">
+            <div class="gallery-tab" id="nature-tab">
+            <span class="tab-text">Nature</span>
+            </div>
+            <div class="gallery-tab" id="portraits-tab">
+            <span class="tab-text">Portraits</span>
+            </div>
+            <div class="gallery-tab" id="city-tab">
+            <span class="tab-text">City</span>
+            </div>
+            <div class="gallery-tab" id="other-tab">
+            <span class="tab-text">Other</span>
+            </div>
+        </div>
+        <div id="pictures-container">
+            <!-- Gallery Pics -->
+        </div>
     </div>
 
     <script src="js/jquery-3.7.1.min.js"></script>

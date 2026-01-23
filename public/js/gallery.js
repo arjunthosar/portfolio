@@ -26,7 +26,7 @@ toggle.addEventListener('click', () => {
 });
 
 /* Generate gallery */
-const gallerydiv = document.getElementById('gallery-container');
+const gallerydiv = document.getElementById('pictures-container');
 const AMOUNT_OF_IMAGES = 279;
 const nums = Array.from({length: AMOUNT_OF_IMAGES}, (v, k) => k + 1);
 let originalOrder = [];
@@ -382,51 +382,51 @@ var lastImage;
 //     }
 // }
 
-document.querySelector('#gallery-bg2').addEventListener('transitionend', () => {
-    bg1.style.transition = 'none';
-    bg1.style.opacity = 0;
-    activeBg = 2;
-})
+// document.querySelector('#gallery-bg2').addEventListener('transitionend', () => {
+//     bg1.style.transition = 'none';
+//     bg1.style.opacity = 0;
+//     activeBg = 2;
+// })
 
 let lastScrollY = window.scrollY;
 let lastTime = Date.now();
 
 // Run on scroll and on load
-window.addEventListener('scroll', updateBackgroundColorFromVisibleImage);
-window.addEventListener('load', updateBackgroundColorFromVisibleImage);
-const checkboxes = ['#nature', '#portraits', '#city', '#other'];
+// window.addEventListener('scroll', updateBackgroundColorFromVisibleImage);
+// window.addEventListener('load', updateBackgroundColorFromVisibleImage);
+// const checkboxes = ['#nature', '#portraits', '#city', '#other'];
 
-checkboxes.forEach(id => {
-    document.querySelector(id).addEventListener('change', checkboxTriggered);
-})
+// checkboxes.forEach(id => {
+//     document.querySelector(id).addEventListener('change', checkboxTriggered);
+// })
 
-document.querySelector('#recent').addEventListener('change', checkboxTriggered);
+// document.querySelector('#recent').addEventListener('change', checkboxTriggered);
 
-function checkboxTriggered(event) {
-    const checkbox = document.getElementById(event.target.name + 'Text');
-    const checked = event.target.checked;
+// function checkboxTriggered(event) {
+//     const checkbox = document.getElementById(event.target.name + 'Text');
+//     const checked = event.target.checked;
 
-    if (event.target.name === "recent") {
-        sortImages();
-    } else {
-        filterImages();
-    }
+//     if (event.target.name === "recent") {
+//         sortImages();
+//     } else {
+//         filterImages();
+//     }
 
-    if (checked) {
-        checkbox.style.opacity = '0';
-        checkbox.style.transform = 'translateY(-100%)';
-        checkbox.style.transition = 'opacity .2s ease-in, transform .2s ease-in';
-        checkbox.style.opacity = '1';
-        checkbox.style.transform = 'translateY(0)';
-    } else {
-        checkbox.style.opacity = '0';
-        checkbox.style.transform = 'translateY(100%)';
-    }
-}
+//     if (checked) {
+//         checkbox.style.opacity = '0';
+//         checkbox.style.transform = 'translateY(-100%)';
+//         checkbox.style.transition = 'opacity .2s ease-in, transform .2s ease-in';
+//         checkbox.style.opacity = '1';
+//         checkbox.style.transform = 'translateY(0)';
+//     } else {
+//         checkbox.style.opacity = '0';
+//         checkbox.style.transform = 'translateY(100%)';
+//     }
+// }
 
 function filterImages() {
     const imageDivs = document.querySelectorAll('div.loadingGalleryImg, div.loadedGalleryImg');
-    const checkedCategories = Array.from(checkboxes)
+    const checkedCategories = Array.from(checkboxes) //TODO
         .filter(checkbox => document.querySelector(checkbox).checked)
         .map(checkbox => checkbox.replace('#', ''));
 
@@ -442,7 +442,7 @@ function filterImages() {
     });
 }
 
-function sortImages() {
+function sortImages() { //TODO
     const checked = document.querySelector('#recent').checked;
     while (gallerydiv.firstChild) {
         gallerydiv.removeChild(gallerydiv.firstChild);
@@ -593,3 +593,31 @@ window.addEventListener('resize', () => {
         computeAllGridSpans();
     }, 150);
 });
+
+const categories = document.getElementsByClassName('gallery-tab');
+
+for (const category of categories) {
+    category.addEventListener('click', function() {
+        //TODO: filterImages(); (figure out how to sort by category)
+        let categoryName = '';
+        if (this.classList.contains('active-tab')) {
+            categoryName = 'all';
+            this.classList.remove('active-tab');
+        } else {
+            for (const cat of categories) {
+                cat.classList.remove('active-tab');
+            }
+            this.classList.add('active-tab');
+            categoryName = this.id.slice(0,-4); // remove '-tab' suffix
+        }
+        const imageDivs = document.querySelectorAll('div.loadingGalleryImg, div.loadedGalleryImg');
+        imageDivs.forEach(div => {
+            const img = div.querySelector('img.galleryImg');
+            if (img.dataset.category != categoryName && categoryName != 'all') {
+                div.style.display = 'none';
+            } else {
+                div.style.display = '';
+            }
+        });
+    });
+}
