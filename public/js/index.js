@@ -68,47 +68,54 @@ const slider = document.querySelector('#recent-works-slideshow .slider');
 const prevButton = document.getElementById('recent-prev-button');
 const nextButton = document.getElementById('recent-next-button');
 let currentIndex = 0;
+let combWidths = 0;
 const slideCount = images.length;
 
-function updateSlider() {
-    const slideWidth = images[0].clientWidth;
-    slider.style.transform = `translateX(-${currentIndex * slideWidth + 10*currentIndex}px)`;
+function updateSlider(forward) {
+    let slideWidth;
+    if (forward) {
+        slideWidth = images[currentIndex].clientWidth;
+        combWidths += slideWidth;
+        currentIndex++;
+    } else {
+        slideWidth = images[currentIndex-1].clientWidth;
+        combWidths -= slideWidth;
+        currentIndex--;
+    }
+    console.log(currentIndex);
+    if (currentIndex == slideCount - 1) {
+        nextButton.style.display = 'none';
+    } else {
+        nextButton.style.display = 'flex';
+    }
+    if (currentIndex == 0) {
+        prevButton.style.display = 'none';
+    } else {
+        prevButton.style.display = 'flex';
+    }
+    const marginAdjustment = 10 * currentIndex; // 10px margin between slides
+    const translateAmount = combWidths + marginAdjustment;
+    const sliderWidth = slider.offsetWidth;
+    const slideTrackWidth = slider.parentElement.offsetWidth;
+    if (currentIndex == slideCount - 1) {
+        slider.style.transform = `translateX(-${translateAmount-(translateAmount+slideTrackWidth-sliderWidth)}px)`;
+        return;
+    }
+    slider.style.transform = `translateX(-${translateAmount}px)`;
 }
 
 // Move forward one image
 nextButton.addEventListener('click', () => {
-    currentIndex++;
-    if (currentIndex == slideCount - 1) {
-        nextButton.style.display = 'none';
-    } else {
-        nextButton.style.display = 'flex';
-    }
-    if (currentIndex == 0) {
-        prevButton.style.display = 'none';
-    } else {
-        prevButton.style.display = 'flex';
-    }
-    if (currentIndex >= slideCount) {
-        currentIndex = 0; // wrap around
-    }
-    updateSlider();
+    // if (currentIndex >= slideCount) {
+    //     currentIndex = 0; // wrap around
+    // }
+    updateSlider(true);
 });
 
 // Move backward one image
 prevButton.addEventListener('click', () => {
-    currentIndex--;
-    if (currentIndex == 0) {
-        prevButton.style.display = 'none';
-    } else {
-        prevButton.style.display = 'flex';
-    }
-    if (currentIndex == slideCount - 1) {
-        nextButton.style.display = 'none';
-    } else {
-        nextButton.style.display = 'flex';
-    }
-    if (currentIndex < 0) {
-        currentIndex = slideCount - 1; // wrap to last
-    }
-    updateSlider();
+    // if (currentIndex < 0) {
+    //     currentIndex = slideCount - 1; // wrap to last
+    // }
+    updateSlider(false);
 });

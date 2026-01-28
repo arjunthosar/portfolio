@@ -7,17 +7,14 @@
     <link rel="stylesheet" href="css/stylesheet.css">
 </head>
 <body class="darkbackground">
-    <div id="contact-background">
-        <div class="portrait-column-up" id="row1">
-            
-        </div>
-        <div class="portrait-column-down" id="row2">
-            
-        </div>
+
+    <div id="contactBackground">
+        <img src="assets/aboutBackground.webp" alt="Background Image" class="background-image" id="bg1">
+        <img src="assets/aboutBackground2.webp" alt="Background Image" class="background-image" id="bg2">
     </div>
 
     <header>
-            <div id="name"><p>Arjun Thosar</p></div>
+        <div id="name"><p>Arjun Thosar</p></div>
         <div class="menu-toggle" id="toggle">&#9776;</div>
         <nav id="nav">
             <a href="index.html"><img src="assets/home.png" class="header-icon"></a>
@@ -27,33 +24,21 @@
         </nav>
     </header>
     
-    <div class="contact-container">
-        <h1>Contact Me</h1>
-        <p>Contact me with any questions or inquiries!</p>
-        <form id="contact-form" action="https://formsubmit.co/arjunthosar%2Bpics%40gmail.com" method="POST">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
+    <div id="contact-container">
+        <div id="contact-form-container">
+            <form id="contact-form">
+            <h1>Contact Me</h1>
+                <input type="text" id="name" name="name" placeholder="Name" required>
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email" placeholder="Email" required>
 
-            <label for="message">Message:</label>
-            <textarea id="message" name="message" required></textarea>
+                <textarea id="message" name="message" rows="5" placeholder="Message" required></textarea>
 
-            <input type="hidden" name="_next" value="https://arjun.pics/contact?submitted=true">
-
-            <button id="submit">Submit</button>
-        </form>
-        <div id="success-message">
-            <img src="assets/checkmarkIcon.png" alt="Success Icon" class="success-icon">
+                <button type="submit">Send</button>
+            </form>
         </div>
-        <div id="social-links">
-            <a href="mailto:arjunthosar%2Bpics%40gmail.com" target="_blank">
-            <img src="assets/emailIcon.png" alt="Email Icon" class="contact-icon">
-            </a>
-            <a href="https://www.instagram.com/arjun_toaster" target="_blank">
-            <img src="assets/instaIcon.png" alt="Instagram Icon" class="contact-icon">
-            </a>
+        <div id="contact-pic">
+            <img src="assets/about-img3-crop.jpg" alt="Contact Image">
         </div>
     </div>
 

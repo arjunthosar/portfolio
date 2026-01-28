@@ -55,9 +55,13 @@ fetch('js/image_categories.json')
             const matched = data.find(item => item.filename === filename);
             if (matched) {
                 image.dataset.category = matched.category;
+                const aspectRatio = matched.width / matched.height;
+                imageDiv.style.aspectRatio = aspectRatio;
+                if (aspectRatio > 1.1) {
+                    imageDiv.classList.add('landscapeGalleryImg');
+                }
             }
             image.id = i;
-            imageDiv.style.aspectRatio = matched.width/matched.height;
             image.oncontextmenu = function() { return false; };
 
             // Add loading image
@@ -67,12 +71,12 @@ fetch('js/image_categories.json')
 
             // Add image to the gallery
             image.onload = function() {
-                        this.parentNode.className = 'loadedGalleryImg';
-                        this.parentNode.removeChild(this.parentNode.firstChild);
-                        // Set grid row span so images of different aspect ratios fit together
-                        setGridSpan(this.parentNode);
-                        // Call setBackgroundShadow after image is fully loaded
-                        setTimeout(() => setBackgroundShadow(this.parentNode), 0);
+                this.parentNode.classList.add('loadedGalleryImg');
+                this.parentNode.removeChild(this.parentNode.firstChild);
+                // Set grid row span so images of different aspect ratios fit together
+                setGridSpan(this.parentNode); //TODO
+                // Call setBackgroundShadow after image is fully loaded
+                setTimeout(() => setBackgroundShadow(this.parentNode), 0);
             };
             originalOrder.push(i);
 
@@ -187,8 +191,11 @@ document.addEventListener('click', function(e) {
     clone.style.transform = 'translate(-50%, -50%)';
     clone.style.top = '50%';
     clone.style.left = '50%';
-    const scale = 1.5;
+    let scale = 1.25;
     const aspectRatio = original.naturalWidth / original.naturalHeight;
+    if (aspectRatio < 1.1 && aspectRatio > 0.9) {
+        scale = 1.75;
+    }
     if (window.innerWidth <= 768) {
         clone.style.width = '90vw';
         clone.style.height = (0.90*window.innerWidth/aspectRatio) + 'px';
@@ -201,7 +208,8 @@ document.addEventListener('click', function(e) {
 
     overlay.style.opacity = 1;
     const imgRGB = getAverageRGBLeftRight(original);
-    overlay.style.background = `linear-gradient(to right, rgba(${imgRGB[0].r}, ${imgRGB[0].g}, ${imgRGB[0].b}), rgba(${imgRGB[1].r}, ${imgRGB[1].g}, ${imgRGB[1].b}))`;
+    const whiteFactor = 1.5;
+    overlay.style.background = `linear-gradient(to right, rgba(${Math.min(imgRGB[0].r*whiteFactor, 200)}, ${Math.min(imgRGB[0].g*whiteFactor, 200)}, ${Math.min(imgRGB[0].b*whiteFactor, 200)}), rgba(${Math.min(imgRGB[1].r*whiteFactor, 200)}, ${Math.min(imgRGB[1].g*whiteFactor, 200)}, ${Math.min(imgRGB[1].b*whiteFactor, 200)}))`;
     clone.style.transition = 'left, right, opacity .25s ease-out';
 
     const closeButton = document.createElement('div');
@@ -262,6 +270,11 @@ document.addEventListener('click', function(e) {
         const imgRGB = getAverageRGBLeftRight(originalImage);
         overlay.style.background = `linear-gradient(to right, rgba(${imgRGB[0].r}, ${imgRGB[0].g}, ${imgRGB[0].b}), rgba(${imgRGB[1].r}, ${imgRGB[1].g}, ${imgRGB[1].b}))`;
         const aspectRatio = originalImage.naturalWidth / originalImage.naturalHeight;
+        if (aspectRatio < 1.1 && aspectRatio > 0.9) {
+            scale = 1.75;
+        } else {
+            scale = 1.25;
+        }
         if (window.innerWidth <= 768) {
             clone.style.width = '90vw';
             clone.style.height = (0.90*window.innerWidth/aspectRatio) + 'px';
@@ -299,6 +312,11 @@ document.addEventListener('click', function(e) {
         const imgRGB = getAverageRGBLeftRight(originalImage);
         overlay.style.background = `linear-gradient(to right, rgba(${imgRGB[0].r}, ${imgRGB[0].g}, ${imgRGB[0].b}), rgba(${imgRGB[1].r}, ${imgRGB[1].g}, ${imgRGB[1].b}))`;
         const aspectRatio = originalImage.naturalWidth / originalImage.naturalHeight;
+        if (aspectRatio < 1.1 && aspectRatio > 0.9) {
+            scale = 1.75;
+        } else {
+            scale = 1.25;
+        }
         if (window.innerWidth <= 768) {
             clone.style.width = '90vw';
             clone.style.height = (0.90*window.innerWidth/aspectRatio) + 'px';
@@ -473,6 +491,9 @@ function sortImages() { //TODO
         if (matched) {
             image.dataset.category = matched.category;
             imageDiv.style.aspectRatio = matched.width / matched.height;
+            if (matched.width / matched.height > 1.1) {
+                imageDiv.classList.add('landscapeGalleryImg');
+            }
         }
         image.id = i;
         image.oncontextmenu = () => false;
@@ -510,7 +531,6 @@ imageDivs.forEach(div => {
         loadedCount++;
         if (loadedCount >= 6) {
                 document.body.classList.remove('loading');
-                updateBackgroundColorFromVisibleImage();
                 // compute grid spans once some images have loaded
                 computeAllGridSpans();
         }
@@ -519,16 +539,14 @@ imageDivs.forEach(div => {
             loadedCount++;
             if (loadedCount >= 6) {
                 document.body.classList.remove('loading');
-                updateBackgroundColorFromVisibleImage();
-                    computeAllGridSpans();
+                computeAllGridSpans();
             }
         });
         img.addEventListener('error', () => {
             loadedCount++;
             if (loadedCount >= 6) {
                 document.body.classList.remove('loading');
-                updateBackgroundColorFromVisibleImage();
-                    computeAllGridSpans();
+                computeAllGridSpans();
             }
         });
     }
@@ -560,7 +578,10 @@ function setGridSpan(item) {
         if (ratio > 0) itemHeight = item.clientWidth / ratio;
     }
 
+    console.log('Item height:', itemHeight);
+
     const span = Math.ceil((itemHeight + rowGap) / (rowHeight + rowGap));
+    item.style.height = itemHeight + 'px';
     item.style.gridRowEnd = `span ${span}`;
 }
 
@@ -620,4 +641,10 @@ for (const category of categories) {
             }
         });
     });
+}
+
+window.onload = function() {
+    setTimeout(function() {
+        window.scrollTo(0, -100);
+    }, 0);
 }
