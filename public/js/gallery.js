@@ -27,10 +27,10 @@ toggle.addEventListener('click', () => {
 
 /* Generate gallery */
 const gallerydiv = document.getElementById('pictures-container');
-const AMOUNT_OF_IMAGES = 279;
+const AMOUNT_OF_IMAGES = 390;
 const nums = Array.from({length: AMOUNT_OF_IMAGES}, (v, k) => k + 1);
 let originalOrder = [];
-const excludedNums = [135];
+const excludedNums = []; // images to exclude from gallery
 let data;
 
 fetch('js/image_categories.json')
@@ -48,7 +48,7 @@ fetch('js/image_categories.json')
             imageDiv.id = i;
 
             const image = document.createElement('img');
-            src = `assets/gallery/${window.innerWidth < 768 ? `${i}m.jpg` : `${i}.jpg`}`
+            src = `assets/gallery/${window.innerWidth < 768 ? `mobile/${i}m.jpg` : `${i}.jpg`}`
             image.setAttribute('data-src', src);
             image.className = 'galleryImg';
             const filename = `${i}.jpg`;
@@ -68,13 +68,12 @@ fetch('js/image_categories.json')
             const loadingImage = document.createElement('img');
             loadingImage.src = 'assets/loading.gif';
             loadingImage.className = 'loadingGif';
+            setGridSpan(imageDiv);
 
             // Add image to the gallery
             image.onload = function() {
                 this.parentNode.classList.add('loadedGalleryImg');
                 this.parentNode.removeChild(this.parentNode.firstChild);
-                // Set grid row span so images of different aspect ratios fit together
-                setGridSpan(this.parentNode); //TODO
                 // Call setBackgroundShadow after image is fully loaded
                 setTimeout(() => setBackgroundShadow(this.parentNode), 0);
             };
@@ -482,7 +481,7 @@ function sortImages() { //TODO
         imageDiv.id = i;
 
         const image = document.createElement('img');
-        const src = `assets/gallery/${window.innerWidth < 768 ? `${i}m.jpg` : `${i}.jpg`}`;
+        const src = `assets/gallery/${window.innerWidth < 768 ? `mobile/${i}m.jpg` : `${i}.jpg`}`;
         image.setAttribute('data-src', src);
         image.className = 'galleryImg';
 
@@ -562,26 +561,20 @@ function setGridSpan(item) {
     if (!item) return;
     const gallery = gallerydiv;
     const computed = getComputedStyle(gallery);
+    const columnWidth = parseFloat(computed.getPropertyValue('grid-template-columns').split(' ')[0]);
+    const aspectRatio = parseFloat(item.style.aspectRatio);
+    console.log(aspectRatio);
     const rowHeight = parseFloat(computed.getPropertyValue('grid-auto-rows')) || 8;
     // 'gap' may return e.g. '16px' so parseFloat works
     const rowGap = parseFloat(computed.getPropertyValue('gap')) || 0;
 
     const img = item.querySelector('img.galleryImg');
-    let itemHeight = item.getBoundingClientRect().height;
-
-    if (img && img.naturalWidth && img.naturalHeight) {
-        // calculate rendered height based on current item width
-        const renderedWidth = item.clientWidth || img.width || img.naturalWidth;
-        itemHeight = (img.naturalHeight * (renderedWidth / img.naturalWidth));
-    } else if (item.style && item.style.aspectRatio) {
-        const ratio = parseFloat(item.style.aspectRatio);
-        if (ratio > 0) itemHeight = item.clientWidth / ratio;
+    let itemHeight = columnWidth / aspectRatio;
+    if (aspectRatio > 1.1) { // landscape
+        itemHeight = (columnWidth * 2 + rowGap) / aspectRatio;
     }
-
-    console.log('Item height:', itemHeight);
-
     const span = Math.ceil((itemHeight + rowGap) / (rowHeight + rowGap));
-    item.style.height = itemHeight + 'px';
+    item.style.height = Math.floor(itemHeight) + 'px';
     item.style.gridRowEnd = `span ${span}`;
 }
 
@@ -600,7 +593,12 @@ function setBackgroundShadow(item) {
         const r = Math.min(rgb.r * 2, 255);
         const g = Math.min(rgb.g * 2, 255);
         const b = Math.min(rgb.b * 2, 255);
-        item.style.boxShadow = `0px 0px 50px 10px rgba(${r}, ${g}, ${b})`;
+        
+        const shadowDiv = document.createElement('div');
+        shadowDiv.className = 'image-shadow';
+        shadowDiv.style.boxShadow = `0px 0px 50px 10px rgba(${r}, ${g}, ${b})`;
+        shadowDiv.style.zIndex = -1;
+        item.appendChild(shadowDiv);
     } catch (e) {
         console.warn('Failed to set background shadow:', e);
     }
@@ -647,4 +645,5 @@ window.onload = function() {
     setTimeout(function() {
         window.scrollTo(0, -100);
     }, 0);
+    this.document.oncontextmenu = function() { return false; };
 }

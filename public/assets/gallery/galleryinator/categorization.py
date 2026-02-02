@@ -30,10 +30,9 @@ prompt = (
     "Categorize each of the following images as exactly one of: "
     "city, nature, portraits, macro, or other."
     "City: Any picture of a city, street, or building."
-    "Nature: Any picture of nature, animals, or plants, including birds, squirrels, chipmunks, trees, or flowers. Portraits of animals count as nature."
+    "Nature: Any picture of nature, animals, or plants, including birds, squirrels, chipmunks, trees, or flowers. Portraits of animals count as nature. Portraits of pets do not count as nature."
     "Portraits: Any picture of a person. where the focus of the picture is on that person."
-    "Macro: Any picture of an object or a plant that is close up, where the background is blurred/irrelevant. Macro photography of nature counts as Macro."
-    "Other: Any picture that does not fit the other categories.\n\n"
+    "Other: Any picture that does not fit the other categories. For example, a picture of a pet with no aspect of nature or city in it will go into Other.\n\n"
     "Return ONLY a JSON array of objects, in the form:\n"
     "[ {\"filename\": \"filename.jpg\", \"category\": \"city\"}, ... ]"
 )
@@ -43,7 +42,6 @@ for obj in image_uris:
     contents.append(obj["filename"])
     contents.append(obj["file_id"])
 
-print(contents)
 
 # # 3. Make the API call to classify
 model_id = "gemini-2.5-flash"
@@ -54,14 +52,9 @@ response = client.models.generate_content(
 
 output_text = response.text.strip()
 
-try:
-    json_data = json.loads(output_text)
-    with open("image_categories.json", "w") as f:
-        json.dump(json_data, f, indent=2)
-    print("✅ Categorized JSON saved to image_categories.json!")
-except json.JSONDecodeError:
-    print("❌ Gemini's response couldn't be parsed as JSON:")
-    print(output_text)
+with open("image_categories.json", "w") as f:
+    f.write(output_text)
+print("✅ JSON saved to image_categories.json!")
 
 # from google import genai
 

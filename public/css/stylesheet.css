@@ -172,7 +172,7 @@ nav .header-icon:hover {
     align-items: center;
     width: 60vw;
     height: 60vh;
-    background-color: rgb(255, 248, 224);
+    background-color: rgb(231, 219, 178);
     padding: 10px;
     margin: 20px 0;
     justify-self: center;
@@ -205,7 +205,7 @@ nav .header-icon:hover {
     font-size: 48px;
     cursor: pointer;
     height: 100%;
-    width: 100px;
+    width: 60px;
     box-sizing: border-box;
     padding: 0;
     display: flex; /* center any icon/text */
@@ -218,22 +218,22 @@ nav .header-icon:hover {
 }
 
 #recent-prev-button {
-    background: linear-gradient(to right, rgba(255, 255, 255, 0.8), transparent);
+    background: transparent;
     left: 0;
     display: none;
 }
 
 #recent-next-button {
-    background: linear-gradient(to left, rgba(255, 255, 255, 0.8), transparent);
+    background: transparent;
     right: 0;
 }
 
 #recent-prev-button:hover {
-    background: linear-gradient(to right, rgba(255, 255, 255, 1), transparent);
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.8), transparent);
 }
 
 #recent-next-button:hover {
-    background: linear-gradient(to left, rgba(255, 255, 255, 1), transparent);
+    background: linear-gradient(to left, rgba(255, 255, 255, 0.8), transparent);
 }
 
 .slideshow-arrows {
@@ -261,7 +261,7 @@ nav .header-icon:hover {
 
 @keyframes scroll {
 	0% { transform: translateX(0); }
-	100% { transform: translateX(-50%)}
+	100% { transform: translateX(-50%) }
 }
 
 .banner {
@@ -282,7 +282,7 @@ nav .header-icon:hover {
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.2);
-    z-index: 0;
+    z-index: -1;
 }
 
 /* Note: the visual height of this element is adjusted at runtime
@@ -399,10 +399,6 @@ nav .header-icon:hover {
     #button-label {
         font-size: 48px;
     }
-
-    /* .slide {
-        height: 60vh;
-    } */
 }
 
 .nav-icon {
@@ -519,6 +515,25 @@ nav .header-icon:hover {
     /* .home-container .slide img {
         height: 45vh;
     } */
+    
+    #recent-works-div {
+        width: 90vw;
+        height: auto;
+        flex-direction: column;
+        display: flex;
+    }
+
+    #recent-works-text {
+        font-size: 24px;
+        width: auto;
+        margin-bottom: 10px;
+    }
+
+    #recent-works-slideshow {
+        height: 40vh;
+    }
+
+    
 }
 
 
@@ -537,7 +552,7 @@ nav .header-icon:hover {
     overflow: hidden;
 }
 
-.background-image {
+#aboutBackground .background-image {
     position: absolute;
     top: 0;
     left: 0;
@@ -733,8 +748,8 @@ footer p {
 }
 
 #gallery-bg {
-    z-index: -1;
-    background: #c4d6c1
+    z-index: -10;
+    background: #b3c4b0
 }
 
 #pictures-container {
@@ -812,15 +827,17 @@ footer p {
 .loadingGalleryImg, .loadedGalleryImg {
         position: relative;
         width: 100%;
-        overflow: hidden;
-}
-
-.loadingGalleryImg {
-    grid-row-end: span 20; /* Placeholder span so that there's not like 20 loading gifs in one tiny spot.*/
 }
 
 .landscapeGalleryImg {
     grid-column: span 2;
+}
+
+.image-shadow {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transform: translate(0, -100%);
 }
 
 @media (max-width: 768px) {
@@ -1028,41 +1045,45 @@ footer p {
 
 /* Contact page */
 
+#contactMainBackground {
+    background-color: #577a5a;
+    transition: background-color 0.5s ease;
+}
 
 #contactBackground {
     position: fixed;
     top: 0;   
-    left: 0;  
-    width: 100%; 
+    right: 0;
+    width: 50%; 
     height: 100%; 
     line-height: 0;
-    z-index: -1;
+    z-index: -10;
     pointer-events: none;
     overflow: hidden;
 }
 
-/* #contact-background::before {
-    content: '';
+#contactBackground .background-image {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.3);
-    z-index: -1;
-} */
+    width: 50vw;
+    height: 100vh;
+    object-fit: cover;
+    /* transition: opacity 1s ease; */
+    opacity: 1;
+}
 
 #contact-container {
     position: absolute;
-    width: 50vw;
+    width: 40vw;
     height: 70vh;
     background-color: white;
-    top: 55vh;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: calc(55vh - 35vh); /*Center vertically: header height + half remaining body height - half element height*/
+    left: 5vw;
     display: flex;
     border-radius: 16px;
     box-shadow: 10px 10px 10px rgba(0,0,0,0.6);
+    z-index: -5;
 }
 
 #contact-form-container {
@@ -1126,4 +1147,40 @@ footer p {
     height: 100%;
     object-fit: cover;
     border-radius: 16px;
+}
+
+#subheading {
+    font-size: 20px;
+    position: relative;
+    top: -10px;
+    color: #707070;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    #contactBackground {
+        right: auto;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    #contactBackground .background-image {
+        height: 100vh;
+        width: 100vw;
+    }
+
+    #contact-container {
+        width: 90vw;
+        height: auto;
+        flex-direction: column;
+    }
+
+    #contact-pic {
+        z-index: -1;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        padding: 0;
+    }
 }

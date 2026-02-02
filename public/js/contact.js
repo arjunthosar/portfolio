@@ -25,51 +25,6 @@ toggle.addEventListener('click', () => {
     nav.classList.toggle('active');
 });
 
-let data;
-const row1 = document.getElementById('row1');
-const row2 = document.getElementById('row2');
-fetch('js/image_categories.json')
-    .then(response => response.json())
-    .then(jsonData => {
-        data = jsonData;
-
-        const portraits = data.filter(item => item.category === 'portraits').map(item => item.filename);
-        for (let i = portraits.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [portraits[i], portraits[j]] = [portraits[j], portraits[i]];
-        }
-
-        for (let i = 0; i < 20; i++) {
-            const image = document.createElement('img');
-            image.src = 'assets/gallery/' + portraits[i];
-            image.className = 'contactimg';
-            // image.id = portraits[i].split('.')[0];
-            if (i < 10) {
-                row1.appendChild(image);
-            } else if (window.innerWidth >= 768) {
-                row2.appendChild(image);
-            } else {
-                row1.appendChild(image);
-            }
-        }
-        const row1Length = row1.children.length;
-        for (let i = 0; i < row1Length * 2; i++) {
-            const clone = row1.children[i % row1Length].cloneNode(true);
-            row1.appendChild(clone);
-        }
-        if (window.innerWidth >= 768) {
-            const row2Length = row2.children.length;
-            for (let i = 0; i < row2Length * 2; i++) {
-                const clone = row2.children[i % row2Length].cloneNode(true);
-                row2.appendChild(clone);
-            }
-        }
-        row1.style.animation = window.innerWidth >= 768 ? 'scrollUp 60s linear infinite' : 'scrollUp 80s linear infinite'
-        window.innerWidth >= 768 ? row2.style.animation = 'scrollDown 60s linear infinite' : null
-
-    })
-    .catch(error => console.error('Error loading JSON:', error));
-
 function getUrlParameter(name) {
     name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
     var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
@@ -82,20 +37,84 @@ if (getUrlParameter('submitted') === 'true') {
     document.getElementById('success-message').style.display = 'block';
 }
 
-const backgrounds = [
-    'assets/aboutBackground.webp',
-    'assets/aboutBackground2.webp',
-    'assets/aboutBackground3.webp',
-    'assets/aboutBackground4.webp'
-]
+
+function getAverageRGB(imgSource) {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+
+    const targetSize = 20; // much smaller than full size
+    canvas.width = targetSize;
+    canvas.height = targetSize;
+
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+            // Draw scaled down image
+            context.drawImage(img, 0, 0, targetSize, targetSize);
+
+            let data;
+            try {
+                data = context.getImageData(0, 0, targetSize, targetSize).data;
+            } catch {
+                resolve({ r: 0, g: 0, b: 0 });
+                return;
+            }
+
+            let r = 0, g = 0, b = 0;
+            const totalPixels = targetSize * targetSize;
+
+            for (let i = 0; i < data.length; i += 4) {
+                r += data[i];
+                g += data[i + 1];
+                b += data[i + 2];
+            }
+
+            resolve({
+                r: Math.round(r / totalPixels),
+                g: Math.round(g / totalPixels),
+                b: Math.round(b / totalPixels)
+            });
+        };
+        img.src = imgSource;
+    });
+}
+
+function shuffle(array) { //(shameless copy paste of Fisher-Yates shuffle)
+    let currentIndex = array.length, randomIndex;
+
+    // While there remain elements to shuffle.
+    while (currentIndex !== 0) {
+
+        // Pick a remaining element.
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        // And swap it with the current element.
+        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+
+    return array;
+}
+
+let backgrounds = []
+fetch('js/image_categories.json')
+    .then(response => response.json())
+    .then(jsonData => {
+        const squareImageObjects = jsonData.filter(item => ((item.width / item.height > 0.9)) && (item.category === 'portraits' || item.category === 'other'));
+        backgrounds = squareImageObjects.map(item => `assets/gallery/${item.filename}`);
+        backgrounds = shuffle(backgrounds);
+        startBackgroundRotation();
+    })
+
 
 let index = 0;
 let showingBg1 = true;
 
 const bg1 = document.getElementById('bg1');
 const bg2 = document.getElementById('bg2');
+const mainBg = document.getElementById('contactMainBackground');
 
-bg1.src = backgrounds[0];
 bg1.style.opacity = 1;
 bg2.style.opacity = 0;
 
@@ -111,27 +130,40 @@ document.querySelector('#bg2').addEventListener('transitionend', () => {
     bg1.style.opacity = 0;
 })
 
-setInterval(() => {
-    index = (index + 1) % backgrounds.length; //(0,1,2,3)
-    const nextBackground = backgrounds[index];
-
-    const newTime = Date.now();
-    if (newTime >= currentTime+5000) {
-        currentTime = newTime;
-        if (showingBg1) {
-            bg2.src = nextBackground;
-            bg2.style.zIndex = -1;
-            bg1.style.zIndex = -2;
-            bg2.style.transition = 'opacity 1s ease';
-            bg2.style.opacity = 1;
-            showingBg1 = false;
-        } else {
-            bg1.src = nextBackground;
-            bg1.style.zIndex = -1;
-            bg2.style.zIndex = -2;
-            bg1.style.transition = 'opacity 1s ease';
-            bg1.style.opacity = 1;
-            showingBg1 = true;
+function startBackgroundRotation() {
+    bg1.src = backgrounds[0];
+    mainBg.style.transition = '';
+    getAverageRGB(backgrounds[0]).then(avgColor => {
+        mainBg.style.backgroundColor = `rgb(${avgColor.r}, ${avgColor.g}, ${avgColor.b})`;
+    });
+    mainBg.style.transition = 'background-color 0.5s ease';
+    setInterval(() => {
+        index = (index + 1) % backgrounds.length;
+        const nextBackground = backgrounds[index];
+        const newTime = Date.now();
+        if (newTime >= currentTime+5000) {
+            currentTime = newTime;
+            if (showingBg1) {
+                bg2.src = nextBackground;
+                getAverageRGB(nextBackground).then(avgColor => {
+                    mainBg.style.backgroundColor = `rgb(${avgColor.r}, ${avgColor.g}, ${avgColor.b})`;
+                });
+                bg2.style.zIndex = -1;
+                bg1.style.zIndex = -2;
+                bg2.style.transition = 'opacity 1s ease';
+                bg2.style.opacity = 1;
+                showingBg1 = false;
+            } else {
+                bg1.src = nextBackground;
+                getAverageRGB(nextBackground).then(avgColor => {
+                    mainBg.style.backgroundColor = `rgb(${avgColor.r}, ${avgColor.g}, ${avgColor.b})`;
+                });
+                bg1.style.zIndex = -1;
+                bg2.style.zIndex = -2;
+                bg1.style.transition = 'opacity 1s ease';
+                bg1.style.opacity = 1;
+                showingBg1 = true;
+            }
         }
-    }
-}, 6000)
+    }, 6000)
+}
