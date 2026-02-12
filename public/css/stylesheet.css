@@ -877,8 +877,14 @@ footer p {
 }
 
 .loadingGalleryImg, .loadedGalleryImg {
-        position: relative;
-        width: 100%;
+    position: relative;
+    width: 100%;
+}
+
+.loadingGalleryImg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .landscapeGalleryImg {
@@ -899,7 +905,7 @@ footer p {
 }
 
 .loadingGif {
-    position: relative;
+    position: absolute;
     width: 64px;
     height: 64px;
     z-index: 1;
