@@ -73,6 +73,7 @@ fetch('js/image_categories.json')
             // Add image to the gallery
             image.onload = function() {
                 this.parentNode.classList.add('loadedGalleryImg');
+                this.parentNode.classList.remove('loadingGalleryImg');
                 this.parentNode.removeChild(this.parentNode.firstChild);
                 // Call setBackgroundShadow after image is fully loaded
                 setTimeout(() => setBackgroundShadow(this.parentNode), 0);
@@ -345,101 +346,6 @@ document.addEventListener('click', function(e) {
 
 var activeBg = 1;
 var lastImage;
-// function updateBackgroundColorFromVisibleImage() {
-//     const imageDivs = document.querySelectorAll('.loadedGalleryImg:not([style*="display: none"])');
-//     for (let i = 0; i < imageDivs.length - 1; i++) {
-//         const rect = imageDivs[i].getBoundingClientRect();
-//         if (window.innerWidth >= 768 ? (rect.top >= 0) : (rect.bottom >= window.innerHeight*0.4 && rect.bottom <= window.innerHeight)) {
-//             if (lastImage === imageDivs[i]) {
-//                 break;
-//             }
-//             var rgb1, rgb2, rgb3;
-//             if (window.innerWidth < 768) {
-//                 const rgbLR = getAverageRGBLeftRight(imageDivs[i].querySelector('img'));
-//                 rgb1 = rgbLR[0];
-//                 rgb2 = rgbLR[1];
-//             } else {
-//                 rgb1 = getAverageRGB(imageDivs[i].querySelector('img'));
-//                 rgb2 = getAverageRGB(imageDivs[i + 1].querySelector('img'));
-//                 if (imageDivs[i].offsetWidth + imageDivs[i+1].offsetWidth + imageDivs[i+2].offsetWidth <= window.innerWidth * 0.8) {
-//                     rgb3 = getAverageRGB(imageDivs[i + 2].querySelector('img'));
-//                 }
-//             }
-//             bg1 = document.getElementById('gallery-bg1');
-//             bg2 = document.getElementById('gallery-bg2');
-//                 bg2.style.zIndex = -2;
-//             }
-//             // var activeBg = 1;
-//             // var lastImage;
-//             // function updateBackgroundColorFromVisibleImage() {
-//             //     const imageDivs = document.querySelectorAll('.loadedGalleryImg:not([style*="display: none"])');
-//             //     for (let i = 0; i < imageDivs.length - 1; i++) {
-//             //         const rect = imageDivs[i].getBoundingClientRect();
-//             //         if (window.innerWidth >= 768 ? (rect.top >= 0) : (rect.bottom >= window.innerHeight*0.4 && rect.bottom <= window.innerHeight)) {/* Lines 334-370 omitted */}
-//             //     }
-//             // }
-
-//             // document.querySelector('#gallery-bg1').addEventListener('transitionend', () => {
-//             //     bg2.style.transition = 'none';
-//             //     bg2.style.opacity = 0;
-//             //     activeBg = 1;
-//             // })
-
-//             // document.querySelector('#gallery-bg2').addEventListener('transitionend', () => {
-//             //     bg1.style.transition = 'none';
-//             //     bg1.style.opacity = 0;
-//             //     activeBg = 2;
-//             // })
-
-//             // let lastScrollY = window.scrollY;
-//             // let lastTime = Date.now();
-
-//             // window.addEventListener('scroll', updateBackgroundColorFromVisibleImage);
-//             // window.addEventListener('load', updateBackgroundColorFromVisibleImage);
-//     }
-// }
-
-// document.querySelector('#gallery-bg2').addEventListener('transitionend', () => {
-//     bg1.style.transition = 'none';
-//     bg1.style.opacity = 0;
-//     activeBg = 2;
-// })
-
-let lastScrollY = window.scrollY;
-let lastTime = Date.now();
-
-// Run on scroll and on load
-// window.addEventListener('scroll', updateBackgroundColorFromVisibleImage);
-// window.addEventListener('load', updateBackgroundColorFromVisibleImage);
-// const checkboxes = ['#nature', '#portraits', '#city', '#other'];
-
-// checkboxes.forEach(id => {
-//     document.querySelector(id).addEventListener('change', checkboxTriggered);
-// })
-
-// document.querySelector('#recent').addEventListener('change', checkboxTriggered);
-
-// function checkboxTriggered(event) {
-//     const checkbox = document.getElementById(event.target.name + 'Text');
-//     const checked = event.target.checked;
-
-//     if (event.target.name === "recent") {
-//         sortImages();
-//     } else {
-//         filterImages();
-//     }
-
-//     if (checked) {
-//         checkbox.style.opacity = '0';
-//         checkbox.style.transform = 'translateY(-100%)';
-//         checkbox.style.transition = 'opacity .2s ease-in, transform .2s ease-in';
-//         checkbox.style.opacity = '1';
-//         checkbox.style.transform = 'translateY(0)';
-//     } else {
-//         checkbox.style.opacity = '0';
-//         checkbox.style.transform = 'translateY(100%)';
-//     }
-// }
 
 function filterImages() {
     const imageDivs = document.querySelectorAll('div.loadingGalleryImg, div.loadedGalleryImg');
@@ -559,6 +465,7 @@ if (loadedCount === imageDivs.length) {
 // Calculate grid-row span for a grid item so varying aspect ratios fit together
 function setGridSpan(item) {
     if (!item) return;
+    if (window.innerWidth <= 768) return; // no grid on mobile
     const gallery = gallerydiv;
     const computed = getComputedStyle(gallery);
     const columnWidth = parseFloat(computed.getPropertyValue('grid-template-columns').split(' ')[0]);
@@ -568,9 +475,8 @@ function setGridSpan(item) {
     // 'gap' may return e.g. '16px' so parseFloat works
     const rowGap = parseFloat(computed.getPropertyValue('gap')) || 0;
 
-    const img = item.querySelector('img.galleryImg');
     let itemHeight = columnWidth / aspectRatio;
-    if (aspectRatio > 1.1) { // landscape
+    if (aspectRatio > 1.1 && window.innerWidth > 768) { // landscape
         itemHeight = (columnWidth * 2 + rowGap) / aspectRatio;
     }
     const span = Math.ceil((itemHeight + rowGap) / (rowHeight + rowGap));
@@ -579,6 +485,7 @@ function setGridSpan(item) {
 }
 
 function computeAllGridSpans() {
+    if (window.innerWidth <= 768) return; // no grid on mobile
     const items = gallerydiv.querySelectorAll('.loadingGalleryImg, .loadedGalleryImg');
     items.forEach(item => setGridSpan(item));
 }
