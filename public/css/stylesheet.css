@@ -8,6 +8,10 @@
 html {
     overflow-x: hidden;
     width: 100vw;
+    text-size-adjust: none;
+    -webkit-text-size-adjust: none;
+    -ms-text-size-adjust: none;
+    -moz-text-size-adjust: none;
 }
 
 @font-face {
@@ -94,6 +98,20 @@ header #name {
     position: relative;
     z-index: inherit;
     color: white;
+    display: flex;
+    flex-direction: row;
+}
+
+header #name a {
+    display: flex;
+    align-items: center;
+}
+
+#ig-icon {
+    height: 64px;
+    width: 64px;
+    transition: transform 0.2s ease;
+    margin-left: 20px;
 }
 
 nav {
@@ -108,9 +126,35 @@ nav .header-icon {
     margin-left: 40px;
 }
 
+nav a {
+    max-width: fit-content;
+    position: relative;
+}
 
 nav .header-icon:hover {
     transform: scale(1.1);
+}
+
+nav a::after {
+    content: attr(data-page);
+    position: absolute;
+    bottom: -45px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 24px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 101;
+}
+
+nav a:hover::after {
+    opacity: 1;
 }
 
 /* Style menu toggle */
@@ -165,6 +209,41 @@ nav .header-icon:hover {
     display: flex;
     width: max-content;
 } */
+
+#recent-works-advertisement {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: absolute;
+    bottom: 0;
+    z-index: 3;
+    transition: opacity 0.3s ease;
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    #recent-works-advertisement {
+        position: relative;
+        margin-bottom: -10px;
+    }
+}
+
+#down-arrow {
+    width: auto;
+    height: 40px;
+    animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(-5px);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+}
 
 #recent-works-div {
     position: relative;
@@ -306,12 +385,21 @@ nav .header-icon:hover {
 }
 
 @media (max-width: 768px) {
+    .banner {
+        margin-bottom: 20px;
+    }
+
     .banner h1 {
-        font-size: 64px;
+        font-size: 48px;
+        margin: 20px auto 20px auto;
     }
 
     .banner p {
         font-size: 32px;
+    }
+
+    .banner-text p {
+        font-size: 28px;
     }
 }
 
@@ -321,9 +409,9 @@ nav .header-icon:hover {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap:50px;
+    gap: 50px;
     margin-top: 64px;
-    font-size: 3rem;
+    font-size: 48px;
 }
 
 .button-container a {
@@ -340,7 +428,7 @@ nav .header-icon:hover {
     align-items: center;
     gap: 32px;
     margin-top: 32px;
-    font-size: 3rem;
+    font-size: 48px;
 }
 
 #nav-bottom-row {
@@ -456,7 +544,6 @@ nav .header-icon:hover {
     text-align: center;
     font-size: 64px;
     font-weight: bold;
-    margin: 16px 0 0 0;
     color: #ffffff;
     font-family: 'Zain', sans-serif;
     z-index: 200;
@@ -812,7 +899,7 @@ footer p {
     position: relative;
     height: 100px;
     width: 200px; 
-    font-size: 2rem;
+    font-size: 32px;
     font-weight: bold;
     color: white;
     background-color: rgba(92, 126, 86, 0.4);
@@ -1070,7 +1157,7 @@ footer p {
 
 #gallery-title {
     color: white;
-    font-size: 2rem;
+    font-size: 32px;
     font-weight: bold;
     text-align: center;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -1079,7 +1166,7 @@ footer p {
 
 #gallery-desc {
     color: white;
-    font-size: 1.5rem;
+    font-size: 24px;
     text-align: center;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     z-index: 1000;
@@ -1087,16 +1174,16 @@ footer p {
 }
 
 .checkboxText {
-    font-size: 1.3rem;
+    font-size: 20px;
     opacity: 1;
 }
 
 @media (max-width: 768px) {
     #gallery-title {
-        font-size: 2rem;
+        font-size: 32px;
     }
     #gallery-desc {
-        font-size: 1.5rem;
+        font-size: 24px;
     }
     
 }

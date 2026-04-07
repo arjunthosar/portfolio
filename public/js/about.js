@@ -80,36 +80,40 @@ const bg2 = document.getElementById('bg2');
 bg1.style.opacity = 1;
 bg2.style.opacity = 0;
 
+let bg1DoneLoading = false;
+let bg2DoneLoading = false;
+
 currentTime = Date.now();
 
 document.querySelector('#bg1').addEventListener('transitionend', () => {
     bg2.style.transition = 'none';
     bg2.style.opacity = 0;
+    bg2DoneLoading = false;
+    index = (index + 1) % backgrounds.length; //(0,1,2,3)
+    bg2.src = backgrounds[index];
 })
 
 document.querySelector('#bg2').addEventListener('transitionend', () => {
     bg1.style.transition = 'none';
     bg1.style.opacity = 0;
+    bg1DoneLoading = false;
+    index = (index + 1) % backgrounds.length; //(0,1,2,3)
+    bg1.src = backgrounds[index];
 })
 
 function startBackgroundRotation() {
     bg1.src = backgrounds[0];
     setInterval(() => {
-        index = (index + 1) % backgrounds.length; //(0,1,2,3)
-        const nextBackground = backgrounds[index];
-
         const newTime = Date.now();
         if (newTime >= currentTime+5000) {
             currentTime = newTime;
             if (showingBg1) {
-                bg2.src = nextBackground;
                 bg2.style.zIndex = -1;
                 bg1.style.zIndex = -2;
                 bg2.style.transition = 'opacity 1s ease';
                 bg2.style.opacity = 1;
                 showingBg1 = false;
             } else {
-                bg1.src = nextBackground;
                 bg1.style.zIndex = -1;
                 bg2.style.zIndex = -2;
                 bg1.style.transition = 'opacity 1s ease';

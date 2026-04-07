@@ -147,3 +147,14 @@ prevButton.addEventListener('click', () => {
         updateSlider(false);
     }
 });
+
+const recentWorksAdvertisement = document.getElementById('recent-works-advertisement');
+console.log(recentWorksAdvertisement);
+window.addEventListener('scroll', () => {
+    console.log(recentWorksAdvertisement.getBoundingClientRect().top);
+    if (recentWorksAdvertisement.getBoundingClientRect().top < 50 * window.innerHeight / 100) {
+        recentWorksAdvertisement.style.opacity = '0';
+    } else {
+        recentWorksAdvertisement.style.opacity = '1';
+    }
+})
